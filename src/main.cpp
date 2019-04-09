@@ -1,15 +1,10 @@
-#include <iostream>
-#include <vector>
-#include <memory>
 #include "Tiles.h"
+#include "Statics.h"
+#include <iostream>
 
 
 int main() {
-    
     TileList gameBoard(1);
     gameBoard.printBoard();
-
-    // TODO:
-        // resolve the correct input for board[y*rowsize + x]
 
 }
