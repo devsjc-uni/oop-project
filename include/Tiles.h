@@ -1,64 +1,68 @@
 // Tiles.h
 // Header file defining abstract base class:
     // Tile
-// Also defines wrapper for vector of Tiles (container):
-    // TileList
+// Also Defines StaticObject abstract derived class
+// And classes derived from StaticObject:
+    // Box
+    // Wall
+// Also defines DynamicObject abstract derived class
+// And classes derived from DynamicObject:
+    // Player
 // Author: Sol Cotton
 
 #ifndef TILES_H
 #define TILES_H
 
-#include <iostream> // for cout
-#include <vector>   // for vector
-#include <memory>   // for shared_ptr
-#include <string>   // for string
+#include "Globals.h"
+#include <vector>
+#include <iostream>
+#include <string>
 
 // Abstract Base Class - Tile
 class Tile {
 private:
 protected:
     std::string name;
-    int tileNumber;
     int x;
     int y;
 public:
     virtual void draw() {std::cout << ' ';}
     // pure virtual functions
-    virtual int getX() {return 0;}
-    virtual int getY() {return 0;}
-    virtual std::string getObjectType() {return "tile";};
+    int getX() {return x;}
+    int getY() {return y;}
+    virtual std::string getObjectType() {return "Tile";};
     // destructor
     virtual ~Tile() {};
 };
 
-// Wrapper for gameboard container object
-class TileList {
-private:
-    const int rowsize = 15;
-    const int columnsize = 13;
+// Tile derived class - StaticObject
+class StaticObject : public Tile {
 public:
-    typedef std::shared_ptr<Tile> TilePtr;
-    std::vector<TilePtr> board;
-    // default, parameterised constructor
-    TileList();
-    TileList(bool boxes);
-    // member functions
-    void printBoard();
-    void setTile(int x, int y, TilePtr generalTile) {board[y*rowsize + x] = generalTile;} 
-    int size() {return rowsize * columnsize;}
-    bool onSpace(std::string spaceType, int x, int y);
-    TilePtr getTile(int x, int y) {return board[y*rowsize + x];}
-    TilePtr operator[] (const int index) {return board[index];}
-    TilePtr operator() (const int x, const int y) {return board[y*rowsize + x];}
-    // template function for performing nested loop 
-    template<typename FUNCTION>
-    inline void boardLoop(FUNCTION f) {
-        for (int x = 0; x < rowsize; x++) {
-            for (int y = 0; y < columnsize; y++){
-                f(x, y);
-            }
-        }
-    }
+    // destructor
+    virtual ~StaticObject() {};
 };
+
+// Static object derived class - Wall
+class Wall : public StaticObject {
+public:
+    // constructor
+    Wall() {}
+    // overload Tile functions
+    std::string getObjectType() {return "Wall";}
+    void draw() {std::cout << "\u25A0";}
+    ~Wall() {};
+};
+
+// StaticObjet derived class - Box
+class Box : public StaticObject {
+public:
+    // constructor
+    Box() {}
+    // overload Tile functions
+    std::string getObjectType() {return "Box";}
+    void draw() {std::cout << "\u25A4";} // \u25A4
+    ~Box() {};
+};
+
 
 #endif
