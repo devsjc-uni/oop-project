@@ -7,10 +7,19 @@
 void Player::move(char direction, TileList &playerBoard) {
     if(playerBoard.moveTile(getX(), getY(), direction)) {
         switch (direction) {
-            case 'A': {setXY(getX() - 1, getY());}
-            case 'D': {setXY(getX() + 1, getY());}
-            case 'W': {setXY(getX(), getY() - 1);}
-            case 'S': {setXY(getX(), getY() + 1);}
+            case 'A': {
+                setXY(getX() - 1, getY());
+                break;
+            } case 'D': {
+                setXY(getX() + 1, getY());
+                break;
+            } case 'W': {
+                setXY(getX(), getY() - 1);
+                break;
+            } case 'S': {
+                setXY(getX(), getY() + 1);
+                break;
+            }
         }
     }    
 }

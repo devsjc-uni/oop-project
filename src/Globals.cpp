@@ -28,6 +28,7 @@ char getValidInput() {
 	std::string input;
     char character;
 	while (input.compare("W") && input.compare("A") && input.compare("S") && input.compare("D")){
+		std::cout << "\r";
 		std::cin >> input;
 		std::cin.ignore(100, '\n');
 		input = toUpper(input);
