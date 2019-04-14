@@ -29,6 +29,7 @@ public:
     void addPlayer(std::shared_ptr<Tile> player);
     void printBoard();
     void setObject(int x, int y, TilePtr generalTile) {rangeCheck(x, y); board[y*rowsize + x] = generalTile;} 
+    void explodeBomb(int x, int y, int bombStrength);
     bool moveTile(int oldX, int oldY, char direction);
     bool onSpace(std::string spaceType, int x, int y);
     TilePtr getObject(int x, int y) {rangeCheck(x, y); return board[y*rowsize + x];}
