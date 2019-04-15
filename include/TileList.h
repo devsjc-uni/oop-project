@@ -26,10 +26,10 @@ public:
     int size() {return rowsize * columnsize;}
     int getRowsize() {return rowsize;}
     int getColumnsize() {return columnsize;}
-    void addPlayer(std::shared_ptr<Tile> player);
     void printBoard();
     void setObject(int x, int y, TilePtr generalTile) {rangeCheck(x, y); board[y*rowsize + x] = generalTile;} 
-    bool moveTile(int oldX, int oldY, char direction);
+    void explodeBomb(int x, int y, int bombStrength);
+    bool moveTile(int oldX, int oldY, char direction, std::shared_ptr<Tile> bombToPlant = nullptr);
     bool onSpace(std::string spaceType, int x, int y);
     TilePtr getObject(int x, int y) {rangeCheck(x, y); return board[y*rowsize + x];}
     TilePtr operator[] (const int index) {return board[index];}

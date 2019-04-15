@@ -17,6 +17,10 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <iostream> // for cout
+#include <vector>   // for vector
+#include <memory>   // for shared_ptr
+#include <string>   // for string
 
 // Abstract Base Class - Tile
 class Tile {
@@ -42,6 +46,12 @@ public:
     virtual ~StaticObject() {};
 };
 
+class Explosion : public StaticObject {
+public:
+    std::string getObjectType() {return "Explosion";}
+    void draw() {std::cout << "X";} //\u1F4A3 \u1F4A2 \u1F525
+};
+
 // Static object derived class - Wall
 class Wall : public StaticObject {
 public:
@@ -53,7 +63,7 @@ public:
     ~Wall() {};
 };
 
-// StaticObjet derived class - Box
+// StaticObject derived class - Box
 class Box : public StaticObject {
 public:
     // constructor
@@ -63,6 +73,5 @@ public:
     void draw() {std::cout << "\u25A4";} // \u25A4
     ~Box() {};
 };
-
 
 #endif

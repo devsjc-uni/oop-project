@@ -11,16 +11,24 @@ public:
     virtual ~DynamicObject() {};
 };
 
+class Bomb;
+
 // DynamicObject derived class - Player
 class Player : public DynamicObject {
+private:
+    bool isAwaitingPlant;
+    int playerNumber;
+    int actionCount;
 public:
-    // default constructor
-    Player() {x = 1; y = 1;}
     // parameterised constructor
     Player(int playerNumber);
     std::string getObjectType() {return "Player";}
-    void move(char direction, TileList &playerBoard);
-    void draw() {std::cout << "\u2687";} // \u26D1 \u267E
+    void move(char direction, TileList &playerBoard, std::shared_ptr<Tile> bombToPlant = nullptr);
+    void draw();
+    void setAwaitingPlant(bool truth) {isAwaitingPlant = truth;}
+    bool getIsAwaitingPlant() {return isAwaitingPlant;} 
+    bool incrementActionCount(); 
+    void resetActionCount() {actionCount = 0;}
     ~Player() {};
 };
 

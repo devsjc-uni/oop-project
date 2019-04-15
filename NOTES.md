@@ -12,3 +12,12 @@ I have used the <random> include and its associated methods to generate random i
 
 ### make_shared
 make_shared<Derived>(); is effectively equivalent to new Derived(); from the non smart pointer days of old. In this way, a vector of smart pointers to base classes can be initialised via make_shared<Tile> and then these can be set to derived class pointers.
+
+### playerVector and deques
+It may be a sensible option to move the playerVector out of the TileList class into a seperate container class, and instead of making it a vector, making it a deque could be more space efficient.
+
+### destructors
+should delete elements of and class vectors in destructors!
+
+### TileList.explodeBomb
+Should add what happens when a bomb explodes onto another bomb!
