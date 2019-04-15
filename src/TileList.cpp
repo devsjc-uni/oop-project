@@ -4,6 +4,7 @@
 // Author: Sol Cotton
 
 #include "TileList.h"
+#include "Explosion.h"
 #include <iostream> // for cout
 #include <memory>   // for shared_ptr
 #include <random>   // for random
