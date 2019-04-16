@@ -10,7 +10,6 @@
 
 const int rowsize = 15;
 const int columnsize = 13;
-const int actionsInTurn = 8;
 int totalActions = 0;
 std::string infoText = "Setting up...";
 int numberOfDeadPlayers = 0;

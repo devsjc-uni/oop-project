@@ -32,12 +32,14 @@ void Controller::plantBomb() {
 void Controller::playerAction(std::shared_ptr<Player> activePlayer) {
     bool madeValidMovement = false;
     while (!madeValidMovement){
+        clearScreen();
+        gameBoard.printBoard();
         char input = getValidInput();
         if (input == 'B') {
             // player wants to plant bomb
             if (activePlayer->getIsAwaitingPlant()) {
                 // player's previous order was to plant bomb
-                std::cout << "Error: Cannot plant bomb whilst already awaiting plant! ";
+                infoText = "Error: Cannot plant bomb whilst already awaiting plant! ";
             } else {
                 // player's previous order was not to plant bomb
                 activePlayer->setAwaitingPlant(true);
@@ -46,7 +48,7 @@ void Controller::playerAction(std::shared_ptr<Player> activePlayer) {
             }
         } else if (input == 'X') {
             if (activePlayer->getIsAwaitingPlant()) {
-                std::cout << "Error: Cannot skip action whilst awaiting plant! ";
+                infoText = "Error: Cannot skip action whilst awaiting plant! ";
             } else {
                 madeValidMovement = true;
             }
@@ -102,9 +104,20 @@ void Controller::performRound() {
 
 // function to set the info text according to the gamestate
 void Controller::setInfo(int PlayerNumber, int actionNumber) {
-    int actionsRemaining = actionsInTurn - actionNumber;
     std::stringstream setText;
-    // firstly text to print if a players turn is not over
+    // first print each player's attributes
+    for (unsigned int i = 0; i < playerPtrs.size(); i++) {
+        setText << "Player " << playerPtrs[i]->getPlayerNumber();
+        if (playerPtrs[i]->isExploded) {setText << " --- \n";}
+        else {
+            setText << ": P(+" << playerPtrs[i]->getPower() << ")"
+                    << " S(+" << playerPtrs[i]->getStrength() << ")"
+                    << " A(+" << playerPtrs[i]->getAgility() << ")\n";
+        }
+    }
+    setText << "\n";
+    int actionsRemaining = (*this)(PlayerNumber)->getAgility() - actionNumber;
+    // text to print if a players turn is not over
     if (actionsRemaining != 0) {
         setText << "Player " << PlayerNumber  
                   << " Actions remaining: " 

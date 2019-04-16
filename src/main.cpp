@@ -7,7 +7,7 @@ int main() {
 
     TileList gameBoard(1);
     Controller controller(gameBoard);
-    controller.createPlayers(2);
+    controller.createPlayers(3);
 
     while (!controller.gameHasEnded()) {
         controller.performRound();

@@ -155,12 +155,20 @@ void TileList::moveTile(int oldX, int oldY, char direction, std::shared_ptr<Tile
 }
 
 void TileList::explodeBomb(int x, int y, int bombStrength, int bombPower) {
-    // set bomb tile to an explosion
+    // check if bomb was under player
+    if (getObject(x, y)->getObjectType() == "Player") {
+        // if so, set player to killed
+        getObject(x, y)->isExploded = true;
+        infoText = "Player Killed!";
+        numberOfDeadPlayers += 1;
+    }
+    // set bomb tile to explosion tile
     setObject(x, y, std::make_shared<Explosion>(false));
     // loop over all compass possible directions
     for (int direction = 0; direction < 4; direction++){
+        int strengthLeft = bombStrength;
         for (int tileIterator = 1; tileIterator < bombPower; tileIterator++){
-            // loop over all tiles in this direction up to bombstrength
+            // loop over all tiles in this direction up to bomb power
             std::string obstacle;
             int obstacleX, obstacleY;
             // set the encountered obstacle according to the direction
@@ -184,17 +192,18 @@ void TileList::explodeBomb(int x, int y, int bombStrength, int bombPower) {
                 }
             } 
             if (obstacle == "Wall") {
-                // continue up to depleted bomb strength
-                if (bombStrength > 1) {
-                    bombStrength -= 1;
-                } else {
-                    // stop the propagating explosion in this direction
+                // stop the propagating explosion in this direction
+                break;
+            } else if (obstacle == "Box") {
+                // replace the box with an explosion tile
+                setObject(obstacleX, obstacleY, std::make_shared<Explosion>(true));
+                if (strengthLeft > 1) {
+                    // if strength is not depleted, continue
+                    strengthLeft -= 1;
+                } else { 
+                    // stop propagating explosion
                     break;
                 }
-            } else if (obstacle == "Box") {
-                // replace the box with an explosion tile, stop explosion
-                setObject(obstacleX, obstacleY, std::make_shared<Explosion>(true)); 
-                break;
             } else if (obstacle == "Player") {
                 // delete the player object, set to explosion tile
                 getObject(obstacleX, obstacleY)->isExploded = true;
@@ -204,6 +213,7 @@ void TileList::explodeBomb(int x, int y, int bombStrength, int bombPower) {
             } else if (obstacle == "Bomb") {
                 // set off the hit bomb
                 explodeBomb(obstacleX, obstacleY, bombStrength, bombPower);
+                getObject(obstacleX, obstacleY)->isExploded = true;
             } else {
                 // set the tile to an explosion tile
                 setObject(obstacleX, obstacleY, std::make_shared<Explosion>(false));
@@ -220,9 +230,14 @@ void TileList::explodeBomb(int x, int y, int bombStrength, int bombPower) {
         if (getObject(x, y)->getObjectType() == "Explosion") {
             if (getObject(x, y)->destroyedBox) {
                 // explosion destroyed a box, drop loot
-
+                float randomNum = dist(mt);
+                if (randomNum < 1.5) setObject(x, y, std::make_shared<PowerUp>(PowerUp::STRENGTH));
+                else if (randomNum < 3.8) setObject(x, y, std::make_shared<PowerUp>(PowerUp::POWER));
+                else if (randomNum < 5) setObject(x, y, std::make_shared<PowerUp>(PowerUp::AGILITY));
+                else {setObject(x, y, std::make_shared<Tile>());}
+            } else {
+                setObject(x, y, std::make_shared<Tile>());
             }
-            setObject(x, y, std::make_shared<Tile>());
         }
     });
     clearScreen();

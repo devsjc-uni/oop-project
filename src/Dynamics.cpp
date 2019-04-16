@@ -56,6 +56,7 @@ Player::Player(int inPlayerNumber) {
     isAwaitingPlant = false;
     power = 4;
     strength = 1;
+    agility = 8;
     playerNumber = inPlayerNumber;
     actionCount = 0;
     if(playerNumber == 1) { x = 1; y = 1; }
@@ -77,7 +78,7 @@ void Player::draw() {
 
 // function to increase a players action count
 bool Player::incrementActionCount() {
-    if (actionCount < actionsInTurn) {
+    if (actionCount < agility) {
         actionCount += 1;
         return true;
     } else {

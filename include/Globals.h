@@ -9,7 +9,6 @@
 
 extern const int rowsize;
 extern const int columnsize;
-extern const int actionsInTurn;
 extern int totalActions;
 extern std::string infoText;
 extern int numberOfDeadPlayers;

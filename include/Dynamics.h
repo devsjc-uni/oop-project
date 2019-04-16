@@ -37,9 +37,9 @@ public:
     int getStrength() {return strength;}
     int getPower() {return power;}
     int getAgility() {return agility;}
-    int setStrength(int inStrength) {strength = inStrength;}
-    int setPower(int inPower) {power = inPower;}
-    int setAgility(int inAgility) {agility = inAgility;}
+    void setStrength(int inStrength) {strength = inStrength;}
+    void setPower(int inPower) {power = inPower;}
+    void setAgility(int inAgility) {agility = inAgility;}
     ~Player() {};
 };
 
