@@ -10,7 +10,10 @@
 
 const int rowsize = 15;
 const int columnsize = 13;
-const int actionsInTurn = 6;
+const int actionsInTurn = 8;
+int totalActions = 0;
+std::string infoText = "Setting up...";
+int numberOfDeadPlayers = 0;
 
 void rangeCheck(int x, int y) {
     if (x < 0 || x > rowsize - 1 || y < 0 || y > columnsize - 1) {
@@ -34,6 +37,7 @@ bool checkValidInput(std::string myInput){
 	validInputs.push_back("S");
 	validInputs.push_back("D");
 	validInputs.push_back("B");
+	validInputs.push_back("X");
 	for (unsigned i = 0; i < validInputs.size(); i++) {
 		if (!myInput.compare(validInputs[i])) {
 			// strings are equal
@@ -57,4 +61,8 @@ char getValidInput() {
 	}
 	character = input[0];
     return character;
+}
+
+void clearScreen() {
+	std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }

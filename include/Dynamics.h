@@ -19,6 +19,9 @@ private:
     bool isAwaitingPlant;
     int playerNumber;
     int actionCount;
+    int power;
+    int strength;
+    int agility;
 public:
     // parameterised constructor
     Player(int playerNumber);
@@ -27,8 +30,16 @@ public:
     void draw();
     void setAwaitingPlant(bool truth) {isAwaitingPlant = truth;}
     bool getIsAwaitingPlant() {return isAwaitingPlant;} 
+    int getPlayerNumber() {return playerNumber;}
+    int getActionCount() {return actionCount;}
     bool incrementActionCount(); 
     void resetActionCount() {actionCount = 0;}
+    int getStrength() {return strength;}
+    int getPower() {return power;}
+    int getAgility() {return agility;}
+    int setStrength(int inStrength) {strength = inStrength;}
+    int setPower(int inPower) {power = inPower;}
+    int setAgility(int inAgility) {agility = inAgility;}
     ~Player() {};
 };
 

@@ -12,6 +12,7 @@
 #include <vector>   // for vector
 #include <memory>   // for shared_ptr
 #include <string>   // for string
+#include <sstream>
 
 // Wrapper for gameboard container object
 class TileList {
@@ -28,8 +29,9 @@ public:
     int getColumnsize() {return columnsize;}
     void printBoard();
     void setObject(int x, int y, TilePtr generalTile) {rangeCheck(x, y); board[y*rowsize + x] = generalTile;} 
-    void explodeBomb(int x, int y, int bombStrength);
-    bool moveTile(int oldX, int oldY, char direction, std::shared_ptr<Tile> bombToPlant = nullptr);
+    void explodeBomb(int x, int y, int bombStrength, int bombPower);
+    int canMoveTile(int oldX, int oldY, char direction);
+    void moveTile(int oldX, int oldY, char direction, std::shared_ptr<Tile> bombToPlant = nullptr);
     bool onSpace(std::string spaceType, int x, int y);
     TilePtr getObject(int x, int y) {rangeCheck(x, y); return board[y*rowsize + x];}
     TilePtr operator[] (const int index) {return board[index];}

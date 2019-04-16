@@ -4,7 +4,6 @@
 // Author: Sol Cotton
 
 #include "TileList.h"
-#include "Explosion.h"
 #include <iostream> // for cout
 #include <memory>   // for shared_ptr
 #include <random>   // for random
@@ -55,7 +54,7 @@ TileList::TileList() {
 }
 
 // TileList parameterised constructor
-TileList::TileList(bool boxes) : TileList() {
+TileList::TileList(bool boxes) : TileList() { 
     // call default constructor to create blank board of walls
     if (boxes) {
         // loop over board
@@ -70,7 +69,7 @@ TileList::TileList(bool boxes) : TileList() {
 
 // function to print populated board
 void TileList::printBoard() {
-    std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+    std::cout << infoText << std::endl;
     for (int y = 0; y < columnsize; y++) {
         // loop over each column
         for (int x = 0; x < rowsize; x++) {
@@ -83,65 +82,84 @@ void TileList::printBoard() {
     }
 }
 
-// function to move board objects around
-bool TileList::moveTile(int oldX, int oldY, char direction, std::shared_ptr<Tile> bombToPlant) {
-    bool moved = false;
+
+int TileList::canMoveTile(int oldX, int oldY, char direction) {
+    int canMoveCode = 0;
+    auto getMoveCode = [] (std::string inString) {
+        if (inString == "Tile") return 1;
+        else if (inString == "Strength") return 2;
+        else if (inString == "Power") return 3;
+        else if (inString == "Agility") return 4;
+        else return 0; 
+    };
     switch(direction){
         case 'W': {
             // object wants to move up
-            if (getObject(oldX, oldY - 1)->getObjectType() == "Tile") {
-                // space is free, move object
-                setObject(oldX, oldY - 1, getObject(oldX, oldY));
-                if (bombToPlant != nullptr) {setObject(oldX, oldY, bombToPlant);}
-                else {setObject(oldX, oldY, std::make_shared<Tile>());}
-                moved = true;
-            }
+            std::string spaceToBeMovedTo = getObject(oldX, oldY - 1)->getObjectType();
+            canMoveCode = getMoveCode(spaceToBeMovedTo);
             break;
         } case 'D': {
             // object wants to move right
-            if (getObject(oldX + 1, oldY)->getObjectType() == "Tile") {
-                // space is free, move object
-                setObject(oldX + 1, oldY, getObject(oldX, oldY));
-                if (bombToPlant != nullptr) {setObject(oldX, oldY, bombToPlant);}
-                else {setObject(oldX, oldY, std::make_shared<Tile>());}
-                moved = true;
-            }
+            std::string spaceToBeMovedTo = getObject(oldX + 1, oldY)->getObjectType();
+            canMoveCode = getMoveCode(spaceToBeMovedTo);
             break;
         } case 'S': {
             // object wants to move down
-            if (getObject(oldX, oldY + 1)->getObjectType() == "Tile") {
-                // space is free, move object
-                setObject(oldX, oldY + 1, getObject(oldX, oldY));
-                if (bombToPlant != nullptr) {setObject(oldX, oldY, bombToPlant);}
-                else {setObject(oldX, oldY, std::make_shared<Tile>());}
-                moved = true;
-            }
+            std::string spaceToBeMovedTo = getObject(oldX, oldY + 1)->getObjectType();
+            canMoveCode = getMoveCode(spaceToBeMovedTo);
             break;
         } case 'A': {
             // object wants to move left
-            if (getObject(oldX - 1, oldY)->getObjectType() == "Tile") {
-                // space is free, move object
-                setObject(oldX - 1, oldY, getObject(oldX, oldY));
-                if (bombToPlant != nullptr) {setObject(oldX, oldY, bombToPlant);}
-                else {setObject(oldX, oldY, std::make_shared<Tile>());}
-                moved = true;
-            }
+            std::string spaceToBeMovedTo = getObject(oldX - 1, oldY)->getObjectType();
+            canMoveCode = getMoveCode(spaceToBeMovedTo);
             break;
         } default: {
             std::cout << "Incorrect movement argument passed\n";
             exit(1);
         }
     }
-    std::cout << moved<<std::endl;
-    return moved;
+    return canMoveCode;
+}
+// function to move board objects around
+void TileList::moveTile(int oldX, int oldY, char direction, std::shared_ptr<Tile> bombToPlant) {
+    switch(direction){
+        case 'W': {
+            // object wants to move up
+            setObject(oldX, oldY - 1, getObject(oldX, oldY));
+            if (bombToPlant != nullptr) {setObject(oldX, oldY, bombToPlant);}
+            else {setObject(oldX, oldY, std::make_shared<Tile>());}
+            break;
+        } case 'D': {
+            // object wants to move right
+            setObject(oldX + 1, oldY, getObject(oldX, oldY));
+            if (bombToPlant != nullptr) {setObject(oldX, oldY, bombToPlant);}
+            else {setObject(oldX, oldY, std::make_shared<Tile>());}
+            break;
+        } case 'S': {
+            // object wants to move down
+            setObject(oldX, oldY + 1, getObject(oldX, oldY));
+            if (bombToPlant != nullptr) {setObject(oldX, oldY, bombToPlant);}
+            else {setObject(oldX, oldY, std::make_shared<Tile>());}
+            break;
+        } case 'A': {
+            // object wants to move left
+            setObject(oldX - 1, oldY, getObject(oldX, oldY));
+            if (bombToPlant != nullptr) {setObject(oldX, oldY, bombToPlant);}
+            else {setObject(oldX, oldY, std::make_shared<Tile>());}
+            break;
+        } default: {
+            std::cout << "Incorrect movement argument passed\n";
+            exit(1);
+        }
+    }
 }
 
-void TileList::explodeBomb(int x, int y, int bombStrength) {
+void TileList::explodeBomb(int x, int y, int bombStrength, int bombPower) {
     // set bomb tile to an explosion
-    setObject(x, y, std::make_shared<Explosion>());
+    setObject(x, y, std::make_shared<Explosion>(false));
     // loop over all compass possible directions
     for (int direction = 0; direction < 4; direction++){
-        for (int tileIterator = 1; tileIterator < bombStrength; tileIterator++){
+        for (int tileIterator = 1; tileIterator < bombPower; tileIterator++){
             // loop over all tiles in this direction up to bombstrength
             std::string obstacle;
             int obstacleX, obstacleY;
@@ -166,31 +184,48 @@ void TileList::explodeBomb(int x, int y, int bombStrength) {
                 }
             } 
             if (obstacle == "Wall") {
-                // stop the propagating explosion in this directionerror: taking address of temporary [-fpermissive]
-                break;
+                // continue up to depleted bomb strength
+                if (bombStrength > 1) {
+                    bombStrength -= 1;
+                } else {
+                    // stop the propagating explosion in this direction
+                    break;
+                }
             } else if (obstacle == "Box") {
                 // replace the box with an explosion tile, stop explosion
-                setObject(obstacleX, obstacleY, std::make_shared<Explosion>()); 
+                setObject(obstacleX, obstacleY, std::make_shared<Explosion>(true)); 
                 break;
             } else if (obstacle == "Player") {
                 // delete the player object, set to explosion tile
-                setObject(obstacleX, obstacleY, std::make_shared<Explosion>());
+                getObject(obstacleX, obstacleY)->isExploded = true;
+                infoText = "Player Killed!";
+                numberOfDeadPlayers += 1;
+                setObject(obstacleX, obstacleY, std::make_shared<Explosion>(false));
+            } else if (obstacle == "Bomb") {
+                // set off the hit bomb
+                explodeBomb(obstacleX, obstacleY, bombStrength, bombPower);
             } else {
                 // set the tile to an explosion tile
-                setObject(obstacleX, obstacleY, std::make_shared<Explosion>());
+                setObject(obstacleX, obstacleY, std::make_shared<Explosion>(false));
             }
         }
     }
     // print the explosion
+    clearScreen();
     printBoard();
     using namespace std::chrono_literals;
     std::this_thread::sleep_for(1s);
     // then remove explosion tiles and reprint
     boardLoop([this](int x, int y){
         if (getObject(x, y)->getObjectType() == "Explosion") {
+            if (getObject(x, y)->destroyedBox) {
+                // explosion destroyed a box, drop loot
+
+            }
             setObject(x, y, std::make_shared<Tile>());
         }
     });
+    clearScreen();
     printBoard();
     
 }

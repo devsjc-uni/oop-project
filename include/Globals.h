@@ -10,10 +10,14 @@
 extern const int rowsize;
 extern const int columnsize;
 extern const int actionsInTurn;
+extern int totalActions;
+extern std::string infoText;
+extern int numberOfDeadPlayers;
 
 void rangeCheck(int x, int y);
 bool checkValidInput(std::string myInput);
 char getValidInput();
+void clearScreen();
 
 
 #endif

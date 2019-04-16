@@ -7,6 +7,7 @@
 #include "Dynamics.h"
 #include "Bomb.h"
 #include <vector>
+#include <deque>
 #include <memory>
 #include <string>
 
@@ -14,7 +15,7 @@ class Controller {
 private:
     TileList gameBoard;
     std::vector<std::shared_ptr<Player>> playerPtrs;
-    std::vector<std::shared_ptr<Bomb>> bombPtrs;
+    std::deque<std::shared_ptr<Bomb>> bombPtrs;
 public:
     // default constructor
     Controller(TileList &inPlayerBoard);
@@ -29,6 +30,12 @@ public:
     void reduceTimers();
 
     void performRound();
+
+    void setInfo(int PlayerNumber, int actionNumber);
+
+    bool gameHasEnded();
+
+    std::shared_ptr<Player> & operator()(int i);
 
     ~Controller() {};
 

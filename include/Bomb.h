@@ -7,16 +7,16 @@
 class Bomb : public StaticObject {
 private:
     int timer;
-    int strength;
+    int bombStrength;
+    int bombPower;
     bool exploded;
 public:
-    // default constructor
-    Bomb() {timer = 5; strength = 4; exploded = false;}
     // parameterised constructor
-    Bomb(int inX, int inY, int inStrength);
+    Bomb(int inX, int inY, int inStrength, int inPower);
     int getTimer() {return timer;}
     void reduceTimer(TileList &playerBoard);
     void explode(TileList &playerBoard);
+    bool getExplodedState() {return exploded;}
     std::string getObjectType() {return "Bomb";}
     void draw() {std::cout << timer;}
     ~Bomb() {}

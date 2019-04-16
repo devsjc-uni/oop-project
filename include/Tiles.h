@@ -30,6 +30,8 @@ protected:
     int x;
     int y;
 public:
+    bool destroyedBox;
+    bool isExploded;
     virtual void draw() {std::cout << ' ';}
     // pure virtual functions
     int getX() {return x;}
@@ -48,6 +50,8 @@ public:
 
 class Explosion : public StaticObject {
 public:
+    // parameterised constructor
+    Explosion(bool onBoxSquare) {destroyedBox = onBoxSquare;}
     std::string getObjectType() {return "Explosion";}
     void draw() {std::cout << "X";} //\u1F4A3 \u1F4A2 \u1F525
 };
@@ -56,7 +60,7 @@ public:
 class Wall : public StaticObject {
 public:
     // constructor
-    Wall() {}
+    Wall() {isExploded = false;}
     // overload Tile functions
     std::string getObjectType() {return "Wall";}
     void draw() {std::cout << "\u25A0";}
@@ -67,11 +71,22 @@ public:
 class Box : public StaticObject {
 public:
     // constructor
-    Box() {}
+    Box() {isExploded = false;}
     // overload Tile functions
     std::string getObjectType() {return "Box";}
     void draw() {std::cout << "\u25A4";} // \u25A4
     ~Box() {};
+};
+
+class PowerUp : public StaticObject {
+public:
+    enum powerUpType {STRENGTH, AGILITY, POWER};
+    // constructor
+    PowerUp(powerUpType thisType) {type = thisType;}
+    std::string getObjectType();
+    void draw();
+private:
+    powerUpType type;
 };
 
 #endif

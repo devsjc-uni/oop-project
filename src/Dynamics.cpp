@@ -5,37 +5,57 @@
 #include "Dynamics.h"
 #include "TileList.h"
 
+// function that moves a player on a board "playerBoard", and increments player's x and y accordingly
+// also increments players attributes
 void Player::move(char direction, TileList &playerBoard, std::shared_ptr<Tile> bombToPlant) {
     if (bombToPlant != nullptr && !isAwaitingPlant) {
         // the controller has sent a bomb to the move methods when the player was not awaiting a plant
-        std::cout << "Cannot plant when already awaiting plant!\n";
+        std::cout << "Error: Bomb passed when not awaiting plant!\n";
         exit(1);
     }
-    if(playerBoard.moveTile(getX(), getY(), direction, bombToPlant)) {
-        switch (direction) {
-            case 'A': {
-                setXY(getX() - 1, getY());
-                break;    
-            }
-            case 'D': {
-                setXY(getX() + 1, getY());
-                break;
-            }
-            case 'W': {
-                setXY(getX(), getY() - 1);
-                break;    
-            }
-            case 'S': {
-                setXY(getX(), getY() + 1);
-                break;
-            }
+    int movementCode = playerBoard.canMoveTile(getX(), getY(), direction);
+    // get the movement code from the canMoveTile method, move the object
+    playerBoard.moveTile(getX(), getY(), direction, bombToPlant);
+    // change the player's xy values according to direction  
+    switch (direction) {
+        case 'A': {
+            setXY(getX() - 1, getY());
+            break;    
+        }
+        case 'D': {
+            setXY(getX() + 1, getY());
+            break;
+        }
+        case 'W': {
+            setXY(getX(), getY() - 1);
+            break;    
+        }
+        case 'S': {
+            setXY(getX(), getY() + 1);
+            break;
+        }
+    }
+    // change the players attributes according to the movement code
+    switch(movementCode) {
+        case 2: {
+            setStrength(getStrength() + 1);
+            break;
+        } case 3: {
+            setPower(getPower() + 1);
+            break;
+        } case 4: {
+            setAgility(getAgility() + 1);
+            break;
         }
     }    
 }
 
 // parameterised constructor for player
 Player::Player(int inPlayerNumber) {
+    isExploded = false;
     isAwaitingPlant = false;
+    power = 4;
+    strength = 1;
     playerNumber = inPlayerNumber;
     actionCount = 0;
     if(playerNumber == 1) { x = 1; y = 1; }
