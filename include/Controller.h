@@ -35,6 +35,8 @@ public:
 
     bool gameHasEnded();
 
+    void displayTitleScreen();
+
     std::shared_ptr<Player> & operator()(int i);
 
     ~Controller() {};

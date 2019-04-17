@@ -1,6 +1,8 @@
 #include "Controller.h"
+#include "Globals.h"
 #include <iomanip>
 #include <sstream>
+#include <iomanip>
 
 Controller::Controller(TileList &inPlayerBoard) {
     gameBoard = inPlayerBoard;
@@ -18,8 +20,7 @@ void Controller::createPlayers(int numPlayers) {
             gameBoard.setObject(playerPtrs[i]->getX(), playerPtrs[i]->getY(), playerPtrs[i]);
         } 
     }
-    infoText = "Begin!";
-    gameBoard.printBoard();
+    infoText = " Player 1 \u2687, begin!";
 }
 
 // function that places a bomb in the activeBombs deque
@@ -47,11 +48,15 @@ void Controller::playerAction(std::shared_ptr<Player> activePlayer) {
                 madeValidMovement = true;
             }
         } else if (input == 'X') {
+            // player wants to skip action
             if (activePlayer->getIsAwaitingPlant()) {
                 infoText = "Error: Cannot skip action whilst awaiting plant! ";
             } else {
                 madeValidMovement = true;
             }
+        } else if (input == 'P') {
+            // player wants to pause
+            loadingScreen();
         } else {
             int movementCode = gameBoard.canMoveTile(activePlayer->getX(), activePlayer->getY(), input);
             if (movementCode > 0) {
@@ -107,7 +112,7 @@ void Controller::setInfo(int PlayerNumber, int actionNumber) {
     std::stringstream setText;
     // first print each player's attributes
     for (unsigned int i = 0; i < playerPtrs.size(); i++) {
-        (PlayerNumber == playerPtrs[i]->getPlayerNumber()) ? setText << ">" : setText << " "; 
+        (PlayerNumber == playerPtrs[i]->getPlayerNumber() && actionNumber != 0) ? setText << ">" : setText << " "; 
         setText << "Player " << playerPtrs[i]->getPlayerNumber()
                 << " " << playerPtrs[i]->getIcon();
         if (playerPtrs[i]->isExploded) {setText << " --- \n";}
@@ -137,7 +142,7 @@ void Controller::setInfo(int PlayerNumber, int actionNumber) {
                 nextPlayer += 1;
             }
         } while ((*this)(nextPlayer)->isExploded);
-        setText << "Player " << nextPlayer << "'s Turn";
+        setText << " Player " << nextPlayer << "'s Turn";
     }
     infoText = setText.str();
 }
@@ -167,3 +172,7 @@ std::shared_ptr<Player> & Controller::operator()(int i) {
         exit(1);
     }
 }
+
+
+
+
