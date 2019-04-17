@@ -43,7 +43,7 @@ void Controller::playerAction(std::shared_ptr<Player> activePlayer) {
             } else {
                 // player's previous order was not to plant bomb
                 activePlayer->setAwaitingPlant(true);
-                bombPtrs.emplace_back(std::make_shared<Bomb>(activePlayer->getX(), activePlayer->getY(), activePlayer->getStrength(), activePlayer->getPower()));
+                bombPtrs.emplace_back(std::make_shared<Bomb>(activePlayer->getX(), activePlayer->getY(), activePlayer->getStrength(), activePlayer->getRange()));
                 madeValidMovement = true;
             }
         } else if (input == 'X') {
@@ -78,8 +78,8 @@ void Controller::reduceTimers() {
         if ((*thisBomb)->getExplodedState()) {aBombHasExploded = true;}
     }
     if (aBombHasExploded) {
-        // delete the exploded bomb object
-        bombPtrs.erase(bombPtrs.begin());
+        // delete the exploded bomb object - will be the first element in the deque
+        bombPtrs.pop_front();
     }
 }
 
@@ -94,7 +94,7 @@ void Controller::performRound() {
                 if (gameHasEnded()) {break;}
                 clearScreen();
                 setInfo((*thisPlayer)->getPlayerNumber(), (*thisPlayer)->getActionCount());
-                gameBoard.printBoard();
+                //gameBoard.printBoard();
             }
             (*thisPlayer)->resetActionCount();
         }
@@ -107,19 +107,21 @@ void Controller::setInfo(int PlayerNumber, int actionNumber) {
     std::stringstream setText;
     // first print each player's attributes
     for (unsigned int i = 0; i < playerPtrs.size(); i++) {
-        setText << "Player " << playerPtrs[i]->getPlayerNumber();
+        (PlayerNumber == playerPtrs[i]->getPlayerNumber()) ? setText << ">" : setText << " "; 
+        setText << "Player " << playerPtrs[i]->getPlayerNumber()
+                << " " << playerPtrs[i]->getIcon();
         if (playerPtrs[i]->isExploded) {setText << " --- \n";}
         else {
-            setText << ": P(+" << playerPtrs[i]->getPower() << ")"
+            setText << ": R(+" << playerPtrs[i]->getRange() << ")"
                     << " S(+" << playerPtrs[i]->getStrength() << ")"
                     << " A(+" << playerPtrs[i]->getAgility() << ")\n";
         }
     }
-    setText << "\n";
+    setText << pickupText << std::endl;
     int actionsRemaining = (*this)(PlayerNumber)->getAgility() - actionNumber;
     // text to print if a players turn is not over
     if (actionsRemaining != 0) {
-        setText << "Player " << PlayerNumber  
+        setText << " Player " << PlayerNumber  
                   << " Actions remaining: " 
                   << actionsRemaining;
     } else {
@@ -165,5 +167,3 @@ std::shared_ptr<Player> & Controller::operator()(int i) {
         exit(1);
     }
 }
-
-// function that creates and plays a game instance

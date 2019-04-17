@@ -20,4 +20,7 @@ It may be a sensible option to move the playerVector out of the TileList class i
 should delete elements of and class vectors in destructors!
 
 ### TileList.explodeBomb
-TODO: CORRECT what happens when a bomb explodes onto another bomb!!
+TODO: CORRECT what happens when a bomb explodes onto another bomb!! 
+      Sitting on bombs
+      Endstate
+      Menu and splashscreen

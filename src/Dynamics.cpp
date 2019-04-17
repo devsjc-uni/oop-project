@@ -38,14 +38,19 @@ void Player::move(char direction, TileList &playerBoard, std::shared_ptr<Tile> b
     // change the players attributes according to the movement code
     switch(movementCode) {
         case 2: {
+            pickupText = " Strength Increased!";
             setStrength(getStrength() + 1);
             break;
         } case 3: {
-            setPower(getPower() + 1);
+            pickupText = " Range Increased!";
+            setRange(getRange() + 1);
             break;
         } case 4: {
+            pickupText = " Agility Increased!:";
             setAgility(getAgility() + 1);
             break;
+        } default: {
+            pickupText = " ";
         }
     }    
 }
@@ -54,7 +59,7 @@ void Player::move(char direction, TileList &playerBoard, std::shared_ptr<Tile> b
 Player::Player(int inPlayerNumber) {
     isExploded = false;
     isAwaitingPlant = false;
-    power = 4;
+    range = 2;
     strength = 1;
     agility = 8;
     playerNumber = inPlayerNumber;
@@ -73,6 +78,19 @@ void Player::draw() {
         case 2: {std::cout << "\u26D1"; break;}
         case 3: {std::cout << "\u267E"; break;}
         case 4: {std::cout << "\u263A"; break;}
+    }
+}
+
+std::string Player::getIcon() const {
+    switch(playerNumber) {
+        case 1: {return "\u2687"; break;}
+        case 2: {return "\u26D1"; break;}
+        case 3: {return "\u267E"; break;}
+        case 4: {return "\u263A"; break;}
+        default: {
+            std:: cout << "Error! Incorrect playerNumber";
+            exit(1);
+        }
     }
 }
 

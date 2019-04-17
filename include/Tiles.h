@@ -80,7 +80,7 @@ public:
 
 class PowerUp : public StaticObject {
 public:
-    enum powerUpType {STRENGTH, AGILITY, POWER};
+    enum powerUpType {STRENGTH, AGILITY, RANGE};
     // constructor
     PowerUp(powerUpType thisType) {type = thisType;}
     std::string getObjectType();

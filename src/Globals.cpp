@@ -11,7 +11,8 @@
 const int rowsize = 15;
 const int columnsize = 13;
 int totalActions = 0;
-std::string infoText = "Setting up...";
+std::string infoText = " Setting up...";
+std::string pickupText = "\n";
 int numberOfDeadPlayers = 0;
 
 void rangeCheck(int x, int y) {
@@ -53,7 +54,6 @@ char getValidInput() {
     char character;
 	
 	while (!checkValidInput(input)){
-		std::cout << "\r";
 		std::cin >> input;
 		std::cin.ignore(100, '\n');
 		input = toUpper(input);

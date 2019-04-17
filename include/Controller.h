@@ -20,7 +20,7 @@ public:
     // default constructor
     Controller(TileList &inPlayerBoard);
 
-    // member function
+    // member functions
     void createPlayers(int numPlayers);
 
     void plantBomb();

@@ -5,6 +5,7 @@
 
 #include "TileList.h"
 #include <iostream> // for cout
+#include <iomanip>
 #include <memory>   // for shared_ptr
 #include <random>   // for random
 #include <thread>   // for sleep
@@ -71,7 +72,8 @@ TileList::TileList(bool boxes) : TileList() {
 void TileList::printBoard() {
     std::cout << infoText << std::endl;
     for (int y = 0; y < columnsize; y++) {
-        // loop over each column
+        // loop over each column, draw some initial space
+        std::cout << " ";
         for (int x = 0; x < rowsize; x++) {
             // then draw whatever tile objects exist in that row
             this->getObject(x, y)->draw();
@@ -80,15 +82,18 @@ void TileList::printBoard() {
         }
         std::cout << "\b\n";
     }
+    std::cout << " Input: ";
 }
 
-
+// function that checks if a tile can be moved onto another tile
+// returns an int according to whether it can or cannot move
 int TileList::canMoveTile(int oldX, int oldY, char direction) {
     int canMoveCode = 0;
+    // use a lambda function to get the appropriate return values
     auto getMoveCode = [] (std::string inString) {
         if (inString == "Tile") return 1;
         else if (inString == "Strength") return 2;
-        else if (inString == "Power") return 3;
+        else if (inString == "Range") return 3;
         else if (inString == "Agility") return 4;
         else return 0; 
     };
@@ -154,7 +159,8 @@ void TileList::moveTile(int oldX, int oldY, char direction, std::shared_ptr<Tile
     }
 }
 
-void TileList::explodeBomb(int x, int y, int bombStrength, int bombPower) {
+// function to explode a bomb object found at x, y 
+void TileList::explodeBomb(int x, int y, int bombStrength, int bombRange) {
     // check if bomb was under player
     if (getObject(x, y)->getObjectType() == "Player") {
         // if so, set player to killed
@@ -167,8 +173,8 @@ void TileList::explodeBomb(int x, int y, int bombStrength, int bombPower) {
     // loop over all compass possible directions
     for (int direction = 0; direction < 4; direction++){
         int strengthLeft = bombStrength;
-        for (int tileIterator = 1; tileIterator < bombPower; tileIterator++){
-            // loop over all tiles in this direction up to bomb power
+        for (int tileIterator = 1; tileIterator < bombRange; tileIterator++){
+            // loop over all tiles in this direction up to bomb range
             std::string obstacle;
             int obstacleX, obstacleY;
             // set the encountered obstacle according to the direction
@@ -211,9 +217,8 @@ void TileList::explodeBomb(int x, int y, int bombStrength, int bombPower) {
                 numberOfDeadPlayers += 1;
                 setObject(obstacleX, obstacleY, std::make_shared<Explosion>(false));
             } else if (obstacle == "Bomb") {
-                // set off the hit bomb
-                explodeBomb(obstacleX, obstacleY, bombStrength, bombPower);
-                getObject(obstacleX, obstacleY)->isExploded = true;
+                // stop the explosion
+                break;
             } else {
                 // set the tile to an explosion tile
                 setObject(obstacleX, obstacleY, std::make_shared<Explosion>(false));
@@ -232,7 +237,7 @@ void TileList::explodeBomb(int x, int y, int bombStrength, int bombPower) {
                 // explosion destroyed a box, drop loot
                 float randomNum = dist(mt);
                 if (randomNum < 1.5) setObject(x, y, std::make_shared<PowerUp>(PowerUp::STRENGTH));
-                else if (randomNum < 3.8) setObject(x, y, std::make_shared<PowerUp>(PowerUp::POWER));
+                else if (randomNum < 3.8) setObject(x, y, std::make_shared<PowerUp>(PowerUp::RANGE));
                 else if (randomNum < 5) setObject(x, y, std::make_shared<PowerUp>(PowerUp::AGILITY));
                 else {setObject(x, y, std::make_shared<Tile>());}
             } else {

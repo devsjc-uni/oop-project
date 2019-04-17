@@ -29,7 +29,7 @@ public:
     int getColumnsize() {return columnsize;}
     void printBoard();
     void setObject(int x, int y, TilePtr generalTile) {rangeCheck(x, y); board[y*rowsize + x] = generalTile;} 
-    void explodeBomb(int x, int y, int bombStrength, int bombPower);
+    void explodeBomb(int x, int y, int bombStrength, int bombRange);
     int canMoveTile(int oldX, int oldY, char direction);
     void moveTile(int oldX, int oldY, char direction, std::shared_ptr<Tile> bombToPlant = nullptr);
     bool onSpace(std::string spaceType, int x, int y);

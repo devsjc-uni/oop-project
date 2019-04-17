@@ -5,13 +5,13 @@
 std::string PowerUp::getObjectType() {
     switch (type) {
         case STRENGTH: {
-            return "Strength";
+            return "Power";
             break;
         } case AGILITY: {
             return "Agility";
             break;
-        } case POWER: {
-            return "Power";
+        } case RANGE: {
+            return "Range";
         } default: {
             std::cout << "Invalid PowerUp Type!\n";
             exit(1);
@@ -27,8 +27,8 @@ void PowerUp::draw() {
         } case AGILITY: {
             std::cout << "A";
             break;
-        } case POWER: {
-            std:: cout << "P";
+        } case RANGE: {
+            std:: cout << "R";
             break;
         } default: {
             std::cout << "Invalid PowerUp Type!\n";
