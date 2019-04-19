@@ -54,6 +54,7 @@ public:
     Explosion(bool onBoxSquare) {destroyedBox = onBoxSquare;}
     std::string getObjectType() {return "Explosion";}
     void draw() {std::cout << "X";} //\u1F4A3 \u1F4A2 \u1F525
+    ~Explosion() {}
 };
 
 // Static object derived class - Wall
@@ -85,6 +86,7 @@ public:
     PowerUp(powerUpType thisType) {type = thisType;}
     std::string getObjectType();
     void draw();
+    ~PowerUp() {}
 private:
     powerUpType type;
 };

@@ -18,11 +18,10 @@
 class TileList {
 public:
     typedef std::shared_ptr<Tile> TilePtr;
-    std::vector<TilePtr> playerVector;
     std::vector<TilePtr> board;
     // default, parameterised constructor
     TileList();
-    TileList(bool boxes);
+    TileList(int levelOfBoxes);
     // member functions
     int size() {return rowsize * columnsize;}
     int getRowsize() {return rowsize;}

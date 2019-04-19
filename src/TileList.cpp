@@ -7,8 +7,8 @@
 #include <iostream> // for cout
 #include <iomanip>
 #include <memory>   // for shared_ptr
-#include <random>   // for random
 #include <thread>   // for sleep
+#include <random>
 
 // create a random generator using mersenne twister algorithm
 std::random_device rd;
@@ -55,14 +55,21 @@ TileList::TileList() {
 }
 
 // TileList parameterised constructor
-TileList::TileList(bool boxes) : TileList() { 
+TileList::TileList(int levelOfBoxes) : TileList() { 
     // call default constructor to create blank board of walls
-    if (boxes) {
+    if (levelOfBoxes) {
         // loop over board
-        boardLoop([this](int x, int y){
+        boardLoop([=](int x, int y){
             if (getObject(x, y)->getObjectType() != "Wall" && !onSpace("start", x, y)) {
                 // we are not on a wall or start space -> place a box
-                if (dist(mt) < 7.5) setObject(x, y, std::make_shared<Box>());
+                float level;
+                switch (levelOfBoxes) {
+                    case 1: {level = 2.5; break;}
+                    case 2: {level = 5.0; break;}
+                    case 3: {level = 7.5; break;}
+                    default: {std::cout << "Error! Incorrect level of boxes passed!"; exit(1);}
+                }
+                if (dist(mt) < level) setObject(x, y, std::make_shared<Box>());
             }
         });
     } 
@@ -82,7 +89,9 @@ void TileList::printBoard() {
         }
         std::cout << "\b\n";
     }
-    std::cout << " Input: ";
+    if (totalActions > numActionsForSuddenDeath) {
+        std::cout << " SUDDEN DEATH! WATCH YOUR STEP!\n Input: ";} 
+    else { std::cout << "Total actions " << totalActions << "/" << numActionsForSuddenDeath <<"\n Input: ";}
 }
 
 // function that checks if a tile can be moved onto another tile
@@ -229,7 +238,7 @@ void TileList::explodeBomb(int x, int y, int bombStrength, int bombRange) {
     clearScreen();
     printBoard();
     using namespace std::chrono_literals;
-    std::this_thread::sleep_for(1s);
+    std::this_thread::sleep_for(0.25s);
     // then remove explosion tiles and reprint
     boardLoop([this](int x, int y){
         if (getObject(x, y)->getObjectType() == "Explosion") {
@@ -249,3 +258,5 @@ void TileList::explodeBomb(int x, int y, int bombStrength, int bombRange) {
     printBoard();
     
 }
+    
+

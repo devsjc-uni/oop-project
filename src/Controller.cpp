@@ -3,7 +3,10 @@
 #include <iomanip>
 #include <sstream>
 #include <iomanip>
+#include <random>
+#include <thread>
 
+// parameterised constructor
 Controller::Controller(TileList &inPlayerBoard) {
     gameBoard = inPlayerBoard;
 }
@@ -73,6 +76,7 @@ void Controller::playerAction(std::shared_ptr<Player> activePlayer) {
             }
         }
     }
+    totalActions += 1;
 }
 
 // funtion that calls the reduce timer function on all bomb objects in activeBombs
@@ -94,16 +98,30 @@ void Controller::performRound() {
     for (thisPlayer = playerPtrs.begin(); thisPlayer != playerPtrs.end(); thisPlayer++) {
         if (!(*thisPlayer)->isExploded) {
             while ((*thisPlayer)->incrementActionCount()) {
+                // first check whether we are in sudden death
+                if (totalActions > numActionsForSuddenDeath) placeSuddenDeathBombs();
                 playerAction((*thisPlayer));
                 reduceTimers();
                 if (gameHasEnded()) {break;}
                 clearScreen();
                 setInfo((*thisPlayer)->getPlayerNumber(), (*thisPlayer)->getActionCount());
-                //gameBoard.printBoard();
+                
             }
             (*thisPlayer)->resetActionCount();
         }
-        if (gameHasEnded()) {break;}
+        if (gameHasEnded()) {
+            clearScreen();
+            // find the player who won
+            int playerWhoWon;
+            for (unsigned int i = 0; i < playerPtrs.size(); i++) {
+                if (!playerPtrs[i]->isExploded) playerWhoWon = playerPtrs[i]->getPlayerNumber();
+            }
+            // cout who won
+            std::cout << " Player " << playerWhoWon << " wins!\n\n\n";
+            using namespace std::chrono_literals;
+            std::this_thread::sleep_for(2s);
+            break;
+            }
     }
 }
 
@@ -112,7 +130,7 @@ void Controller::setInfo(int PlayerNumber, int actionNumber) {
     std::stringstream setText;
     // first print each player's attributes
     for (unsigned int i = 0; i < playerPtrs.size(); i++) {
-        (PlayerNumber == playerPtrs[i]->getPlayerNumber() && actionNumber != 0) ? setText << ">" : setText << " "; 
+        (PlayerNumber == playerPtrs[i]->getPlayerNumber() && actionNumber < 8) ? setText << ">" : setText << " "; 
         setText << "Player " << playerPtrs[i]->getPlayerNumber()
                 << " " << playerPtrs[i]->getIcon();
         if (playerPtrs[i]->isExploded) {setText << " --- \n";}
@@ -149,7 +167,7 @@ void Controller::setInfo(int PlayerNumber, int actionNumber) {
 
 // quick check to see if game has ended
 bool Controller::gameHasEnded() {
-    if (static_cast<unsigned int>(numberOfDeadPlayers) == playerPtrs.size() - 1) {
+    if (static_cast<unsigned int>(numberOfDeadPlayers) > playerPtrs.size() - 2) {
         return true;
     } else {
         return false;
@@ -170,6 +188,39 @@ std::shared_ptr<Player> & Controller::operator()(int i) {
     else {
         std::cout << "Trying to access non existant player!\n";
         exit(1);
+    }
+}
+
+// create a random generator using mersenne twister algorithm
+std::random_device rnd;
+std::mt19937 alg(rnd());
+std::uniform_real_distribution<float> getRand(0, 400);
+
+// function to carry out sudden death mode
+void Controller::placeSuddenDeathBombs() {
+    // loop over the board
+    gameBoard.boardLoop([this](int x, int y){
+        if (gameBoard(x, y)->getObjectType() == "Tile") {
+            // on each tile, plant a bomb with a certain probability
+            if (getRand(alg) < bombDropPercentage) {
+                // create a ptr to a bomb object and place on the board
+                bombPtrs.emplace_back(std::make_shared<Bomb>(x, y, 1, 4));
+                gameBoard.setObject(x, y, bombPtrs[bombPtrs.size() - 1]);
+            }
+        }
+    });
+}
+
+// destructor
+Controller::~Controller() {
+    for (unsigned int i = 0; i < bombPtrs.size(); i++) {
+        bombPtrs.pop_back();
+    }
+    for (unsigned int i = 0; i < playerPtrs.size(); i++) {
+        playerPtrs.pop_back();
+    }
+    for (unsigned int i = 0; i < gameBoard.board.size(); i++) {
+        gameBoard.board.pop_back();
     }
 }
 

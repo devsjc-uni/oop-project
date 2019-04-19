@@ -7,29 +7,30 @@
 int main() {
 
     while (true) {
+        // reset external counters
+        resetCounters();
         displayTitleScreen(0);
         char input = getValidInput(SCREEN::TITLE);
         while (input != 'N') {
+            // newgame has not been selected
             if (input == 'O') {
                 optionsMenu();
             } else {
-                // quit was selected
+                // input == 'Q' - show quit screen
                 displayTitleScreen(3);
-                std::cout << "\n\n";
-                for (int i = 0; i < 73; i++) {std::cout << "-";}
-	            std::cout << "\nQUIT\n\n";
-                std::cout << "Exiting. Thanks for playing!<\n";
-                exit(0);
+                exit(1);
             }
             displayTitleScreen(0);
             input = getValidInput(SCREEN::TITLE);
         }
+        // get the desired number of players
         int players = getNumberOfPlayers();
-        TileList gameboard(1);
+        // initialise a board and the controller
+        TileList gameboard(amountOfBoxes);
         Controller controller(gameboard);
         controller.createPlayers(players);
         loadingScreen();
-
+        // perform rounds until game has ended
         while (!controller.gameHasEnded()) {
             controller.performRound();
         }

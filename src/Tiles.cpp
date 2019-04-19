@@ -5,7 +5,7 @@
 std::string PowerUp::getObjectType() {
     switch (type) {
         case STRENGTH: {
-            return "Power";
+            return "Strength";
             break;
         } case AGILITY: {
             return "Agility";

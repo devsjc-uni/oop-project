@@ -33,13 +33,15 @@ public:
 
     void setInfo(int PlayerNumber, int actionNumber);
 
+    void placeSuddenDeathBombs();
+
     bool gameHasEnded();
 
     void displayTitleScreen();
 
     std::shared_ptr<Player> & operator()(int i);
 
-    ~Controller() {};
+    ~Controller();
 
 
 };

@@ -13,10 +13,18 @@
 
 int rowsize = 15;
 int columnsize = 13;
+int amountOfBoxes = 3;
 int totalActions = 0;
+int numActionsForSuddenDeath = 150;
+int bombDropPercentage = 2;
 std::string infoText = " Setting up...";
 std::string pickupText = "\n";
 int numberOfDeadPlayers = 0;
+
+void resetCounters() {
+	totalActions = 0;
+	numberOfDeadPlayers = 0;
+}
 
 
 void rangeCheck(int x, int y) {
@@ -48,6 +56,7 @@ bool checkValidInput(std::string myInput, SCREEN thisScreen){
 		} case TITLE : {
 			validInputs.push_back("N");
 			validInputs.push_back("O");
+			validInputs.push_back("Q");
 		} case OPTIONS : {
 			validInputs.push_back("Q");
 			validInputs.push_back("R");
@@ -138,12 +147,19 @@ void displayTitleScreen(int chosenScreen) {
 	switch (chosenScreen) {
 		case 1: {underline(11, 12); break;}
 		case 2: {underline(34, 11); break;}
-		case 3: {underline(55, 8); break;}
+		case 3: {underline(56, 8); break;}
 		case 0: {printBoxedNewLines(1); break;}
 	}
     printBoxedNewLines(2);
     for (int i = 0; i < 73; i++) {(!(i % 2)) ? std::cout << "\u25A0" : std::cout << " ";}
     std::cout << std::endl;
+	if (chosenScreen == 3) {
+		// quit has been selected
+		std::cout << "\n\n";
+		for (int i = 0; i < 73; i++) {std::cout << "-";}
+		std::cout << "\nQUIT\n\n";
+		std::cout << "Exiting. Thanks for playing!<\n";
+	}
 }
 
 // function for the options menu
@@ -152,10 +168,18 @@ void optionsMenu() {
 	std::cout << "\n\n";
     for (int i = 0; i < 73; i++) {std::cout << "-";}
 	std::cout << "\nOPTIONS\n\n"
-		 	  << "Enter your desired gameboard rowsize (standard 15): ";
+		 	  << "1/5: Enter your desired gameboard rowsize (5-100, standard 15): ";
 	rowsize = getIntBetweenPandQ(5, 100);
-	std::cout << "\nEnter your desired gameboard columnsize (standard 13): ";
+	std::cout << "\n2/5: Enter your desired gameboard columnsize (5-100, standard 13): ";
 	columnsize = getIntBetweenPandQ(5, 100);
+	std::cout << "\n3/5: Choose the amount of boxes to be spawned (standard HIGH)\n"
+			  << "NONE [0]\t LOW [1]\t MEDIUM [2]\t HIGH [3]: ";
+	amountOfBoxes = getIntBetweenPandQ(0, 3);
+	std::cout << "\n4/5: Enter the number of actions before sudden death (0-500, standard 150): ";
+	numActionsForSuddenDeath = getIntBetweenPandQ(0, 500);
+	std::cout << "\n5/5: Enter the likelihood of a bomb drop per square per action during sudden death (0-10, standard 2): ";
+	bombDropPercentage = getIntBetweenPandQ(0, 10);
+
 	std::cout << "\nSaving changes...\n";
 	using namespace std::chrono_literals;
     std::this_thread::sleep_for(1s);
