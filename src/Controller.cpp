@@ -12,15 +12,13 @@
 #include <thread>
 
 // parameterised constructor
-Controller::Controller(TileList &inPlayerBoard) {
+Controller::Controller(TileList &inPlayerBoard, int numPlayers) {
+    // initialise TileList object
     gameBoard = inPlayerBoard;
-}
-
-// function to initilaise players in the vector of players
-// pointers to these are then set on the board
-void Controller::createPlayers(int numPlayers) {
+    // add players to vector
     if (numPlayers < 2 || numPlayers > 4) {
-        throw "Error: Can only add two to four players!\n";
+        std::cout << "\nError: Can only add two to four players!\n";
+        exit(0);
     } else {
         for (int i = 0; i < numPlayers; i++) {
             playerPtrs.emplace_back(std::make_shared<Player>(i+1));
@@ -28,12 +26,6 @@ void Controller::createPlayers(int numPlayers) {
         } 
     }
     infoText = " Player 1 \u2687, begin!";
-}
-
-// function that places a bomb in the activeBombs deque
-void Controller::plantBomb() {
-    std::shared_ptr<Bomb> lastBomb = bombPtrs[bombPtrs.size() - 1];
-    gameBoard.setObject(lastBomb->getX(), lastBomb->getY(), lastBomb);
 }
 
 // function to get input and carry out a player action
@@ -63,7 +55,7 @@ void Controller::playerAction(std::shared_ptr<Player> activePlayer) {
             }
         } else if (input == 'P') {
             // player wants to pause
-            loadingScreen();
+            menuscreen::pause();
         } else {
             // player wants to move
             int movementCode = gameBoard.canMoveTile(activePlayer->getX(), activePlayer->getY(), input);
@@ -236,9 +228,6 @@ Controller::~Controller() {
     }
     for (unsigned int i = 0; i < playerPtrs.size(); i++) {
         playerPtrs.pop_back();
-    }
-    for (unsigned int i = 0; i < gameBoard.board.size(); i++) {
-        gameBoard.board.pop_back();
     }
 }
 

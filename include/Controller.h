@@ -22,33 +22,18 @@ private:
     std::vector<std::shared_ptr<Player>> playerPtrs;
     std::deque<std::shared_ptr<Bomb>> bombPtrs;
 public:
-    // default constructor
-    Controller(TileList &inPlayerBoard);
-
+    // parameterised constructor
+    Controller(TileList &inPlayerBoard, int numPlayers);
     // member functions
-    void createPlayers(int numPlayers);
-
-    void plantBomb();
-
     void playerAction(std::shared_ptr<Player> activePlayer);
-    
     void reduceTimers();
-
     void performRound();
-
     void setInfo(int PlayerNumber, int actionNumber);
-
     void placeSuddenDeathBombs();
-
     bool gameHasEnded();
-
     void displayTitleScreen();
-
     std::shared_ptr<Player> & operator()(int i);
-
     ~Controller();
-
-
 };
 
 #endif

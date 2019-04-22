@@ -33,7 +33,7 @@ bool TileList::onSpace(std::string spaceType, int x, int y) {
         return y == 0 || x == 0 || y == columnsize - 1 || x == rowsize - 1;
     } else {
         std::cout << "Incorrect input in onSpace bool!\n";
-        exit(1);
+        exit(0);
     }
 }
 
@@ -67,7 +67,7 @@ TileList::TileList(int levelOfBoxes) : TileList() {
                     case 1: {level = 2.5; break;}
                     case 2: {level = 5.0; break;}
                     case 3: {level = 7.5; break;}
-                    default: {std::cout << "Error! Incorrect level of boxes passed!"; exit(1);}
+                    default: {std::cout << "Error! Incorrect level of boxes passed!"; exit(0);}
                 }
                 if (dist(mt) < level) setObject(x, y, std::make_shared<Box>());
             }
@@ -129,7 +129,7 @@ int TileList::canMoveTile(int oldX, int oldY, char direction) {
             break;
         } default: {
             std::cout << "Incorrect movement argument passed\n";
-            exit(1);
+            exit(0);
         }
     }
     return canMoveCode;
@@ -163,7 +163,7 @@ void TileList::moveTile(int oldX, int oldY, char direction, std::shared_ptr<Tile
             break;
         } default: {
             std::cout << "Incorrect movement argument passed\n";
-            exit(1);
+            exit(0);
         }
     }
 }
@@ -250,13 +250,21 @@ void TileList::explodeBomb(int x, int y, int bombStrength, int bombRange) {
                 else if (randomNum < 5) setObject(x, y, std::make_shared<PowerUp>(PowerUp::AGILITY));
                 else {setObject(x, y, std::make_shared<Tile>());}
             } else {
+                // explosion did not destroy a box
                 setObject(x, y, std::make_shared<Tile>());
             }
         }
     });
     clearScreen();
     printBoard();
-    
+}
+
+// Destructor
+TileList::~TileList() {
+    // delete all objects in vector of shared pointers
+    for (unsigned int i = 0; i < board.size(); i++) {
+        board.pop_back();
+    }
 }
     
 

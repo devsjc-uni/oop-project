@@ -20,7 +20,7 @@ std::string PowerUp::getObjectType() {
             return "Range";
         } default: {
             std::cout << "Invalid PowerUp Type!\n";
-            exit(1);
+            exit(0);
         }
     }
 }
@@ -39,7 +39,7 @@ void PowerUp::draw() {
             break;
         } default: {
             std::cout << "Invalid PowerUp Type!\n";
-            exit(1);
+            exit(0);
         }
     }
 }

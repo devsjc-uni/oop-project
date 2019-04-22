@@ -17,7 +17,7 @@ Bomb::Bomb(int inX, int inY, int inStrength, int inRange) {
     isExploded = false;
 }
 
-// reduceTimer
+// function to reduceTimer
 void Bomb::reduceTimer(TileList &playerBoard) {
     if (timer > 1) {
         timer -= 1;

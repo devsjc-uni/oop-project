@@ -34,7 +34,7 @@ public:
     TilePtr getObject(int x, int y) {rangeCheck(x, y); return board[y*rowsize + x];}
     TilePtr operator[] (const int index) {return board[index];}
     TilePtr operator() (const int x, const int y) {rangeCheck(x, y); return board[y*rowsize + x];}
-    // template function for performing nested loop 
+    // template function for performing nested loop over x and y
     template<typename FUNCTION>
     inline void boardLoop(FUNCTION f) {
         for (int x = 0; x < rowsize; x++) {
@@ -43,6 +43,8 @@ public:
             }
         }
     }
+    // destructor
+    ~TileList();
 };
 
 

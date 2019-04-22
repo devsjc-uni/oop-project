@@ -39,6 +39,7 @@ bool checkValidInput(std::string myInput, SCREEN thisScreen){
 	// define a list of valid inputs
 	std::vector<std::string> validInputs;
 	switch(thisScreen) {
+		// push back the valid inputs for each screen case onto the vector
 		case GAME : {
 			validInputs.push_back("W");
 			validInputs.push_back("A");
@@ -51,11 +52,6 @@ bool checkValidInput(std::string myInput, SCREEN thisScreen){
 			validInputs.push_back("N");
 			validInputs.push_back("O");
 			validInputs.push_back("Q");
-		} case OPTIONS : {
-			validInputs.push_back("Q");
-			validInputs.push_back("R");
-			validInputs.push_back("C");
-			validInputs.push_back("T");
 		} case PAUSE : {
 			validInputs.push_back("C");
 			validInputs.push_back("Q");

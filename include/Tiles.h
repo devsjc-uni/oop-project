@@ -6,7 +6,7 @@
     // Box
     // Wall
     // PowerUp
-// Author: Sol Cotton
+// Author: Sol Cotton 08/04/19
 
 #ifndef TILES_H
 #define TILES_H

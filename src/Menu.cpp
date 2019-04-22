@@ -32,7 +32,7 @@ int getIntBetweenPandQ(int p, int q){
 }
 
 // function to print out the title screen
-void displayTitleScreen(int chosenScreen) {
+void menuscreen::title(TITLECHOICE choice) {
 	clearScreen();
     for (int i = 0; i < 73; i++) {(!(i % 2)) ? std::cout << "\u25A0" : std::cout << " ";}
     // Lambda function for printing lines beginning and ending with a box
@@ -60,27 +60,27 @@ void displayTitleScreen(int chosenScreen) {
 		std::cout << std::setw(78-length-distance) << "\u25A0\n";
 	};
     // Underline a different menu option depending on which was chosen
-	switch (chosenScreen) {
-		case 1: {underline(11, 12); break;}
-		case 2: {underline(34, 11); break;}
-		case 3: {underline(56, 8); break;}
-		case 0: {printBoxedNewLines(1); break;}
+	switch (choice) {
+		case TITLECHOICE::NEWGAME: {underline(11, 12); break;}
+		case TITLECHOICE::OPTIONS: {underline(34, 11); break;}
+		case TITLECHOICE::QUIT: {underline(56, 8); break;}
+		case TITLECHOICE::NONE: {printBoxedNewLines(1); break;}
 	}
     printBoxedNewLines(2);
     for (int i = 0; i < 73; i++) {(!(i % 2)) ? std::cout << "\u25A0" : std::cout << " ";}
     std::cout << std::endl;
-	if (chosenScreen == 3) {
-		// quit has been selected
+	if (choice == TITLECHOICE::QUIT) {
 		std::cout << "\n\n";
 		for (int i = 0; i < 73; i++) {std::cout << "-";}
 		std::cout << "\nQUIT\n\n";
 		std::cout << "Exiting. Thanks for playing!<\n";
+        exit(0);
 	}
 }
 
 // function for the options menu
-void optionsMenu() {
-	displayTitleScreen(2);
+void menuscreen::options() {
+	menuscreen::title(TITLECHOICE::OPTIONS);
 	std::cout << "\n\n";
     for (int i = 0; i < 73; i++) {std::cout << "-";}
 	std::cout << "\nOPTIONS\n\n"
@@ -100,10 +100,11 @@ void optionsMenu() {
     // Mimic long save time to reasure player 
 	using namespace std::chrono_literals;
     std::this_thread::sleep_for(1s);
+
 }
 
-// Function to display the loading screen
-void displayLoadingScreen() {
+// Function to display the pause screen text
+void displayPauseText() {
 	for (int i = 0; i < 73; i++) {std::cout << "-";}
 	std::cout << "\nPAUSE\n\n"
 			  << "Perform an action by typing a letter followed by the ENTER key.\n"
@@ -122,20 +123,20 @@ void displayLoadingScreen() {
 }
 
 // Function to implement navigation with the loading screen
-void loadingScreen() {
+void menuscreen::pause() {
 	clearScreen();
-    displayLoadingScreen();
+    displayPauseText();
     char input = getValidInput(SCREEN::PAUSE);
     if (input == 'Q') {
         clearScreen();
         std::cout << "Exiting. Thanks for playing!";
-        exit(1);
+        exit(0);
     }
 }
 
 // Function to return the number of players
 int getNumberOfPlayers() {
-	displayTitleScreen(1);
+	menuscreen::title(TITLECHOICE::NEWGAME);
 	std::cout << "\n\n";
     for (int i = 0; i < 73; i++) {std::cout << "-";}
 	std::cout << "\nNEW GAME\n\n";

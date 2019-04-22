@@ -17,8 +17,7 @@ extern int bombDropPercentage;
 extern std::string infoText;
 extern std::string pickupText;
 extern int numberOfDeadPlayers;
-typedef enum SCREEN {TITLE, OPTIONS, GAME, PAUSE} SCREEN;
-extern enum SCREEN screen;
+enum SCREEN {TITLE, GAME, PAUSE};
 
 // global functions 
 void rangeCheck(int x, int y);

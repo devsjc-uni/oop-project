@@ -5,12 +5,19 @@
 #ifndef MENU_H
 #define MENU_H
 
+// functions required by menuscreen methods
 int getIntBetweenPandQ(int p, int q);
-void displayTitleScreen(int chosenScreen);
-void optionsMenu();
-void displayLoadingScreen();
-void loadingScreen();
 int getNumberOfPlayers();
 void resetCounters();
+void displayPauseText();
+enum TITLECHOICE {NONE, NEWGAME, OPTIONS, QUIT};
+
+// menuscreen methods
+namespace menuscreen {
+    void title(TITLECHOICE choice);
+    void options();
+    void pause();
+}
+
 
 #endif

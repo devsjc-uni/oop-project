@@ -17,22 +17,10 @@ void Player::move(char direction, TileList &playerBoard, std::shared_ptr<Tile> b
     playerBoard.moveTile(getX(), getY(), direction, bombToPlant);
     // change the player's xy values according to direction  
     switch (direction) {
-        case 'A': {
-            setXY(getX() - 1, getY());
-            break;    
-        }
-        case 'D': {
-            setXY(getX() + 1, getY());
-            break;
-        }
-        case 'W': {
-            setXY(getX(), getY() - 1);
-            break;    
-        }
-        case 'S': {
-            setXY(getX(), getY() + 1);
-            break;
-        }
+        case 'A': {setXY(getX() - 1, getY()); break;}
+        case 'D': {setXY(getX() + 1, getY()); break;}
+        case 'W': {setXY(getX(), getY() - 1); break;}
+        case 'S': {setXY(getX(), getY() + 1); break;}
     }
     // change the players attributes according to the movement code
     switch(movementCode) {
@@ -63,23 +51,34 @@ Player::Player(int inPlayerNumber) {
     agility = 5;
     playerNumber = inPlayerNumber;
     actionCount = 0;
-    if(playerNumber == 1) { x = 1; y = 1; }
-    else if(playerNumber == 4) { x = rowsize - 2; y = 1; }
-    else if(playerNumber == 3) { x = 1; y = columnsize - 2; }
-    else if(playerNumber == 2) { x = rowsize - 2; y = columnsize - 2; }
-    else {std::cout << "Playernumber too high\n"; exit(1);}
+    // set starting position based on playernumber
+    switch(playerNumber){
+        case 1: {x = 1; y = 1; break;}
+        case 2: {x = rowsize - 2; y = columnsize - 2; break;}
+        case 3: {x = 1; y = columnsize - 2; break;}
+        case 4: {x = rowsize - 2; y = 1; break;}
+        default: {
+            std:: cout << "Error! Incorrect playerNumber";
+            exit(0);
+        }
+    }
 }
 
-// draw function for player
+// override Tile draw function for each player number
 void Player::draw() {
     switch(playerNumber) {
         case 1: {std::cout << "\u2687"; break;}
         case 2: {std::cout << "\u26D1"; break;}
         case 3: {std::cout << "\u267E"; break;}
         case 4: {std::cout << "\u263A"; break;}
+        default: {
+            std:: cout << "Error! Incorrect playerNumber";
+            exit(0);
+        }
     }
 }
 
+// function to get the players icon
 std::string Player::getIcon() const {
     switch(playerNumber) {
         case 1: {return "\u2687"; break;}
@@ -88,7 +87,7 @@ std::string Player::getIcon() const {
         case 4: {return "\u263A"; break;}
         default: {
             std:: cout << "Error! Incorrect playerNumber";
-            exit(1);
+            exit(0);
         }
     }
 }
