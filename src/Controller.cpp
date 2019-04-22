@@ -1,5 +1,10 @@
+// Controller.cpp
+// Defines memeber functions initialised in Controller.h
+// Author: Sol Cotton 16/04/19
+
 #include "Controller.h"
 #include "Globals.h"
+#include "Menu.h"
 #include <iomanip>
 #include <sstream>
 #include <iomanip>
@@ -15,8 +20,7 @@ Controller::Controller(TileList &inPlayerBoard) {
 // pointers to these are then set on the board
 void Controller::createPlayers(int numPlayers) {
     if (numPlayers < 2 || numPlayers > 4) {
-        std::cout << "Can only add two to four players!\n";
-        exit(1);
+        throw "Error: Can only add two to four players!\n";
     } else {
         for (int i = 0; i < numPlayers; i++) {
             playerPtrs.emplace_back(std::make_shared<Player>(i+1));
@@ -61,12 +65,18 @@ void Controller::playerAction(std::shared_ptr<Player> activePlayer) {
             // player wants to pause
             loadingScreen();
         } else {
+            // player wants to move
             int movementCode = gameBoard.canMoveTile(activePlayer->getX(), activePlayer->getY(), input);
             if (movementCode > 0) {
                 // player is not trying to move into an obstacle
                 if (activePlayer->getIsAwaitingPlant()) {
                     // player was awaiting a plant -> pass bomb object to move function
-                    activePlayer->move(input, gameBoard, bombPtrs[bombPtrs.size() - 1]);
+                    try {
+                        activePlayer->move(input, gameBoard, bombPtrs[bombPtrs.size() - 1]);
+                    } catch (const char* errorMessage) {
+                        std::cerr << errorMessage;
+                        exit(0);
+                    }
                 } else {
                     // player was not awaiting plant
                     activePlayer->move(input, gameBoard);
@@ -130,18 +140,29 @@ void Controller::setInfo(int PlayerNumber, int actionNumber) {
     std::stringstream setText;
     // first print each player's attributes
     for (unsigned int i = 0; i < playerPtrs.size(); i++) {
-        (PlayerNumber == playerPtrs[i]->getPlayerNumber() && actionNumber < 8) ? setText << ">" : setText << " "; 
+        // draw a > infront of the currently active player
+        (PlayerNumber == playerPtrs[i]->getPlayerNumber() && actionNumber < (*this)(PlayerNumber)->getAgility()) ? setText << ">" : setText << " "; 
+        // denote the player number, their icon, their alive status, and their current attributes
         setText << "Player " << playerPtrs[i]->getPlayerNumber()
                 << " " << playerPtrs[i]->getIcon();
-        if (playerPtrs[i]->isExploded) {setText << " --- \n";}
-        else {
+        if (playerPtrs[i]->isExploded) {
+            setText << " --- \n";
+        } else {
             setText << ": R(+" << playerPtrs[i]->getRange() << ")"
                     << " S(+" << playerPtrs[i]->getStrength() << ")"
                     << " A(+" << playerPtrs[i]->getAgility() << ")\n";
         }
     }
+    // also add any powerup text
     setText << pickupText << std::endl;
-    int actionsRemaining = (*this)(PlayerNumber)->getAgility() - actionNumber;
+    int actionsRemaining;
+    try {
+        // get the number of actions remaining
+        actionsRemaining = (*this)(PlayerNumber)->getAgility() - actionNumber;
+    } catch (const char* errorMessage) {
+        std::cerr << errorMessage;
+        exit(0);
+    }
     // text to print if a players turn is not over
     if (actionsRemaining != 0) {
         setText << " Player " << PlayerNumber  
@@ -185,10 +206,7 @@ std::shared_ptr<Player> & Controller::operator()(int i) {
         }
     }
     if (playerFound) return playerPtrs[elementNumber];
-    else {
-        std::cout << "Trying to access non existant player!\n";
-        exit(1);
-    }
+    else {throw "Error: Trying to access non existant player!\n";}
 }
 
 // create a random generator using mersenne twister algorithm

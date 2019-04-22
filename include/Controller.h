@@ -1,3 +1,8 @@
+// Controller.h
+// Initialises the Controller class and its member functions
+// Defines gameplay, member data include a TileList object for a board and containers for bombs and players
+// Author: Sol Cotton 16/04/19
+
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 

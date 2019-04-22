@@ -1,13 +1,11 @@
 // Tiles.h
 // Header file defining abstract base class:
     // Tile
-// Also Defines StaticObject abstract derived class
-// And classes derived from StaticObject:
+// And classes derived from Tile:
+    // Explosion
     // Box
     // Wall
-// Also defines DynamicObject abstract derived class
-// And classes derived from DynamicObject:
-    // Player
+    // PowerUp
 // Author: Sol Cotton
 
 #ifndef TILES_H
@@ -41,14 +39,7 @@ public:
     virtual ~Tile() {};
 };
 
-// Tile derived class - StaticObject
-class StaticObject : public Tile {
-public:
-    // destructor
-    virtual ~StaticObject() {};
-};
-
-class Explosion : public StaticObject {
+class Explosion : public Tile {
 public:
     // parameterised constructor
     Explosion(bool onBoxSquare) {destroyedBox = onBoxSquare;}
@@ -58,28 +49,28 @@ public:
 };
 
 // Static object derived class - Wall
-class Wall : public StaticObject {
+class Wall : public Tile {
 public:
     // constructor
     Wall() {isExploded = false;}
-    // overload Tile functions
+    // override Tile functions
     std::string getObjectType() {return "Wall";}
     void draw() {std::cout << "\u25A0";}
     ~Wall() {};
 };
 
-// StaticObject derived class - Box
-class Box : public StaticObject {
+// Tile derived class - Box
+class Box : public Tile {
 public:
     // constructor
     Box() {isExploded = false;}
-    // overload Tile functions
+    // override Tile functions
     std::string getObjectType() {return "Box";}
     void draw() {std::cout << "\u25A4";} // \u25A4
     ~Box() {};
 };
 
-class PowerUp : public StaticObject {
+class PowerUp : public Tile {
 public:
     enum powerUpType {STRENGTH, AGILITY, RANGE};
     // constructor

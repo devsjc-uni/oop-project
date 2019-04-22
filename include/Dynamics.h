@@ -1,3 +1,9 @@
+// Dynamics.h
+// Defines DynamicObject derived class
+// And classes derived from DynamicObject:
+    // Player 
+// Author: Sol Cotton 17/04/19
+
 #ifndef DYNAMICS_H
 #define DYNAMICS_H
 
@@ -6,6 +12,7 @@
 // Tile derived class - DynamicObject
 class DynamicObject : public Tile {
 public:
+    // member function to change XY values only present in DynamicObjects
     void setXY(int inX, int inY) {rangeCheck(inX, inY); x = inX; y = inY;};
     // destructor
     virtual ~DynamicObject() {};

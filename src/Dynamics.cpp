@@ -1,6 +1,6 @@
 // Dynamics.cpp
 // Defines member functions from the header file Dynamics.h
-// Author: Sol Cotton
+// Author: Sol Cotton 16/04/19
 
 #include "Dynamics.h"
 #include "TileList.h"
@@ -10,8 +10,7 @@
 void Player::move(char direction, TileList &playerBoard, std::shared_ptr<Tile> bombToPlant) {
     if (bombToPlant != nullptr && !isAwaitingPlant) {
         // the controller has sent a bomb to the move methods when the player was not awaiting a plant
-        std::cout << "Error: Bomb passed when not awaiting plant!\n";
-        exit(1);
+        throw "Error: Bomb passed when not awaiting plant!\n";
     }
     int movementCode = playerBoard.canMoveTile(getX(), getY(), direction);
     // get the movement code from the canMoveTile method, move the object
@@ -61,7 +60,7 @@ Player::Player(int inPlayerNumber) {
     isAwaitingPlant = false;
     range = 2;
     strength = 1;
-    agility = 8;
+    agility = 5;
     playerNumber = inPlayerNumber;
     actionCount = 0;
     if(playerNumber == 1) { x = 1; y = 1; }

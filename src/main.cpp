@@ -1,7 +1,7 @@
 #include "TileList.h"
 #include "Controller.h"
 #include "Globals.h"
-#include <iostream>
+#include "Menu.h"
 
 
 int main() {
@@ -28,7 +28,8 @@ int main() {
         // initialise a board and the controller
         TileList gameboard(amountOfBoxes);
         Controller controller(gameboard);
-        controller.createPlayers(players);
+        try {controller.createPlayers(players);}
+        catch (const char* errorMessage) {std::cerr << errorMessage; exit(1);}
         loadingScreen();
         // perform rounds until game has ended
         while (!controller.gameHasEnded()) {

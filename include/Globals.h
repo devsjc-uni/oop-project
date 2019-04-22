@@ -1,6 +1,6 @@
 // Globals.h
-// Header file defining functions required globally
-// Author: Sol Cotton
+// Header file defining functions and data required globally
+// Author: Sol Cotton 19/04/19
 
 #ifndef GLOBALS_H
 #define GLOBALS_H
@@ -25,14 +25,5 @@ void rangeCheck(int x, int y);
 bool checkValidInput(std::string myInput, SCREEN thisScreen = GAME);
 char getValidInput(SCREEN thisScreen = GAME);
 void clearScreen();
-int getIntBetweenPandQ(int p, int q);
-// functions not required by everything, but included in global to reduce number of includes in main
-void displayTitleScreen(int chosenScreen);
-void optionsMenu();
-void displayLoadingScreen();
-void loadingScreen();
-int getNumberOfPlayers();
-void resetCounters();
-
 
 #endif

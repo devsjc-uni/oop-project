@@ -1,18 +1,17 @@
 // TileList.h
 // Defines wrapper for vector of Tiles (container):
     // TileList
-// Author: Sol Cotton
+// Author: Sol Cotton 19/04/19
 
 #ifndef TILELIST_H
 #define TILELIST_H
 
 #include "Tiles.h"
 #include "Globals.h"
-#include <iostream> // for cout
-#include <vector>   // for vector
-#include <memory>   // for shared_ptr
-#include <string>   // for string
-#include <sstream>
+#include <iostream>
+#include <vector> 
+#include <memory> 
+#include <string> 
 
 // Wrapper for gameboard container object
 class TileList {

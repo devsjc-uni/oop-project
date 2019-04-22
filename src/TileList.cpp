@@ -1,7 +1,6 @@
 // TileList.cpp
-// Defines member functions for classes defined in TileList.h:
-    // TileList
-// Author: Sol Cotton
+// Defines member functions for TileList class defined in TileList.h
+// Author: Sol Cotton 17/04/19
 
 #include "TileList.h"
 #include <iostream> // for cout
@@ -15,6 +14,7 @@ std::random_device rd;
 std::mt19937 mt(rd());
 std::uniform_real_distribution<float> dist(1.0, 9.0);
 
+// function to check if a space is on the map edge, a wall spot, or a starting space
 bool TileList::onSpace(std::string spaceType, int x, int y) {
     rangeCheck(x, y);
     if (spaceType == "wall") {
