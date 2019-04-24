@@ -91,7 +91,7 @@ void TileList::printBoard() {
     }
     if (totalActions > numActionsForSuddenDeath) {
         std::cout << " SUDDEN DEATH! WATCH YOUR STEP!\n Input: ";} 
-    else { std::cout << "Total actions " << totalActions << "/" << numActionsForSuddenDeath <<"\n Input: ";}
+    else { std::cout << " Total actions " << totalActions << "/" << numActionsForSuddenDeath <<"\n Input: ";}
 }
 
 // function that checks if a tile can be moved onto another tile
@@ -127,9 +127,6 @@ int TileList::canMoveTile(int oldX, int oldY, char direction) {
             std::string spaceToBeMovedTo = getObject(oldX - 1, oldY)->getObjectType();
             canMoveCode = getMoveCode(spaceToBeMovedTo);
             break;
-        } default: {
-            std::cout << "Incorrect movement argument passed\n";
-            exit(0);
         }
     }
     return canMoveCode;
@@ -174,7 +171,7 @@ void TileList::explodeBomb(int x, int y, int bombStrength, int bombRange) {
     if (getObject(x, y)->getObjectType() == "Player") {
         // if so, set player to killed
         getObject(x, y)->isExploded = true;
-        infoText = "Player Killed!";
+        infoText = " Player Killed!";
         numberOfDeadPlayers += 1;
     }
     // set bomb tile to explosion tile

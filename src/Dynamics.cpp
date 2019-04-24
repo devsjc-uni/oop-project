@@ -78,13 +78,20 @@ void Player::draw() {
     }
 }
 
+void Player::zeroAttributes() {
+    // set attributes to zero to send player to bottom of leaderboard
+    range = 0;
+    agility = 0;
+    strength = 0;
+}
+
 // function to get the players icon
 std::string Player::getIcon() const {
     switch(playerNumber) {
-        case 1: {return "\u2687"; break;}
-        case 2: {return "\u26D1"; break;}
-        case 3: {return "\u267E"; break;}
-        case 4: {return "\u263A"; break;}
+        case 1: {return "\u2687";}
+        case 2: {return "\u26D1";}
+        case 3: {return "\u267E";}
+        case 4: {return "\u263A";}
         default: {
             std:: cout << "Error! Incorrect playerNumber";
             exit(0);

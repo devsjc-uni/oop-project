@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 
+// globally accessible variables
 int rowsize = 15;
 int columnsize = 13;
 int amountOfBoxes = 3;
@@ -23,14 +24,6 @@ void rangeCheck(int x, int y) {
     std::cout << "Error: Out of bounds on board.\n";
     exit(1);
     }
-}
-
-// function to return an uppercased string
-std::string toUpper(std::string input){
-	// uppercases all chars in input std::string
-	for (auto& x : input)
-		x = toupper(x);
-	return input;
 }
 
 // function to check whether an input is valid for a given screen
@@ -73,7 +66,12 @@ char getValidInput(SCREEN thisScreen) {
 	// uppercase everything for consistency
 	std::string input;
     char character;
-	
+	// Lambda function to uppercase a string
+	auto toUpper = [](std::string inString) {
+		for (auto& x : inString) {x = toupper(x);}
+		return inString;
+	};
+	// get input until it is valid
 	while (!checkValidInput(input, thisScreen)){
 		std::cin >> input;
 		std::cin.ignore(100, '\n');
@@ -83,8 +81,27 @@ char getValidInput(SCREEN thisScreen) {
     return character;
 }
 
-// function to make printing 30 newlines look slightly less suspect elsewhere in code
+// function to imporve clarity of printing several newlines elsewhere in code
 void clearScreen() {
-	std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+	for (int i = 0; i < 30; i++) {std::cout << std::endl;}
+}
+
+std::string getStringOfLength(int length) {
+	auto validString = [length](const std::string& s) {
+		int i = 0;
+		for (const char c : s) {
+			i += 1;
+			if (!isalpha(c)) return false;
+			if (i > length) return false;
+		}
+		return true;
+	};
+	// initialise an invalid string
+	std::string input = "*";
+	while (!validString(input)) {
+		std::cin >> input;
+		std::cin.ignore(100, '\n');
+	}
+	return input;
 }
 

@@ -5,6 +5,7 @@
 #include "Controller.h"
 #include "Globals.h"
 #include "Menu.h"
+#include <algorithm>
 #include <iomanip>
 #include <sstream>
 #include <iomanip>
@@ -20,12 +21,25 @@ Controller::Controller(TileList &inPlayerBoard, int numPlayers) {
         std::cout << "\nError: Can only add two to four players!\n";
         exit(0);
     } else {
+        // an allowable number of players has been chosen
         for (int i = 0; i < numPlayers; i++) {
             playerPtrs.emplace_back(std::make_shared<Player>(i+1));
+            // Get user input names for each player
+            std::cout << "\n";
+            switch(i) {
+                case 0: {std::cout << "First player, enter your name (max 5 letters, no special characters): "; break;}
+                case 1: {std::cout << "Second "; break;}
+                case 2: {std::cout << "Third "; break;}
+                case 3: {std::cout << "Fourth "; break;}
+            }
+            if (i != 0) std::cout << "player, enter your name: ";
+            std::string name = getStringOfLength(5);
+            playerPtrs[i]->setPlayerName(name);
             gameBoard.setObject(playerPtrs[i]->getX(), playerPtrs[i]->getY(), playerPtrs[i]);
         } 
     }
-    infoText = " Player 1 \u2687, begin!";
+    // player 1 begins
+    infoText = " " + (*this)(1)->getPlayerName() + " " + playerPtrs[0]->getIcon() + ", begin!";
 }
 
 // function to get input and carry out a player action
@@ -39,7 +53,7 @@ void Controller::playerAction(std::shared_ptr<Player> activePlayer) {
             // player wants to plant bomb
             if (activePlayer->getIsAwaitingPlant()) {
                 // player's previous order was to plant bomb
-                infoText = "Error: Cannot plant bomb whilst already awaiting plant! ";
+                infoText = " Error: Cannot plant bomb whilst already awaiting plant! ";
             } else {
                 // player's previous order was not to plant bomb
                 activePlayer->setAwaitingPlant(true);
@@ -49,7 +63,7 @@ void Controller::playerAction(std::shared_ptr<Player> activePlayer) {
         } else if (input == 'X') {
             // player wants to skip action
             if (activePlayer->getIsAwaitingPlant()) {
-                infoText = "Error: Cannot skip action whilst awaiting plant! ";
+                infoText = " Error: Cannot skip action whilst awaiting plant! ";
             } else {
                 madeValidMovement = true;
             }
@@ -83,13 +97,13 @@ void Controller::playerAction(std::shared_ptr<Player> activePlayer) {
 
 // funtion that calls the reduce timer function on all bomb objects in activeBombs
 void Controller::reduceTimers() {
-    bool aBombHasExploded = false;
+    int numExplodedBombs = 0;
     for(auto thisBomb = bombPtrs.cbegin(); thisBomb != bombPtrs.cend(); thisBomb++) {
         (*thisBomb)->reduceTimer(gameBoard);
-        if ((*thisBomb)->getExplodedState()) {aBombHasExploded = true;}
+        if ((*thisBomb)->getExplodedState()) {numExplodedBombs += 1;}
     }
-    if (aBombHasExploded) {
-        // delete the exploded bomb object - will be the first element in the deque
+    for(int i = 0; i < numExplodedBombs; i++) {
+        // delete the exploded bomb objects - will be the first elements in the deque
         bombPtrs.pop_front();
     }
 }
@@ -107,7 +121,6 @@ void Controller::performRound() {
                 if (gameHasEnded()) {break;}
                 clearScreen();
                 setInfo((*thisPlayer)->getPlayerNumber(), (*thisPlayer)->getActionCount());
-                
             }
             (*thisPlayer)->resetActionCount();
         }
@@ -119,7 +132,7 @@ void Controller::performRound() {
                 if (!playerPtrs[i]->isExploded) playerWhoWon = playerPtrs[i]->getPlayerNumber();
             }
             // cout who won
-            std::cout << " Player " << playerWhoWon << " wins!\n\n\n";
+            std::cout << (*this)(playerWhoWon)->getPlayerName() << " wins!\n\n\n";
             using namespace std::chrono_literals;
             std::this_thread::sleep_for(2s);
             break;
@@ -130,17 +143,23 @@ void Controller::performRound() {
 // function to set the info text according to the gamestate
 void Controller::setInfo(int PlayerNumber, int actionNumber) {
     std::stringstream setText;
+    // sort the vector by who is doing best via a lambda function
+    std::sort(playerPtrs.begin(), playerPtrs.end(), [](const std::shared_ptr<Player> p1, const std::shared_ptr<Player> p2) {
+        return (p1->getAgility() + p1->getRange() + p1->getStrength() > p2->getAgility() + p2->getRange() + p2->getStrength());
+    });
     // first print each player's attributes
     for (unsigned int i = 0; i < playerPtrs.size(); i++) {
         // draw a > infront of the currently active player
         (PlayerNumber == playerPtrs[i]->getPlayerNumber() && actionNumber < (*this)(PlayerNumber)->getAgility()) ? setText << ">" : setText << " "; 
         // denote the player number, their icon, their alive status, and their current attributes
-        setText << "Player " << playerPtrs[i]->getPlayerNumber()
+        setText << playerPtrs[i]->getPlayerName() 
+                << std::setw(7 - playerPtrs[i]->getPlayerName().length())
                 << " " << playerPtrs[i]->getIcon();
         if (playerPtrs[i]->isExploded) {
-            setText << " --- \n";
+            playerPtrs[i]->zeroAttributes();
+            setText << ": --- \n";
         } else {
-            setText << ": R(+" << playerPtrs[i]->getRange() << ")"
+            setText << ": R(+" << playerPtrs[i]->getRange() - 1 << ")"
                     << " S(+" << playerPtrs[i]->getStrength() << ")"
                     << " A(+" << playerPtrs[i]->getAgility() << ")\n";
         }
@@ -155,11 +174,17 @@ void Controller::setInfo(int PlayerNumber, int actionNumber) {
         std::cerr << errorMessage;
         exit(0);
     }
+    // resort by player number
+    // sort the vector by who is doing best via a lambda function - only modifies copy in this method
+    std::sort(playerPtrs.begin(), playerPtrs.end(), [](const std::shared_ptr<Player> p1, const std::shared_ptr<Player> p2) {
+        return (p1->getPlayerNumber() < p2->getPlayerNumber());
+    });
     // text to print if a players turn is not over
     if (actionsRemaining != 0) {
-        setText << " Player " << PlayerNumber  
-                  << " Actions remaining: " 
-                  << actionsRemaining;
+        setText << " " << (*this)(PlayerNumber)->getPlayerName()
+                  << ": " 
+                  << actionsRemaining
+                  << " Actions remaining";
     } else {
         // otherwise find the next not dead player
         int nextPlayer = PlayerNumber;
@@ -173,7 +198,7 @@ void Controller::setInfo(int PlayerNumber, int actionNumber) {
                 nextPlayer += 1;
             }
         } while ((*this)(nextPlayer)->isExploded);
-        setText << " Player " << nextPlayer << "'s Turn";
+        setText << " " << (*this)(nextPlayer)->getPlayerName() << "'s Turn";
     }
     infoText = setText.str();
 }
@@ -214,7 +239,7 @@ void Controller::placeSuddenDeathBombs() {
             // on each tile, plant a bomb with a certain probability
             if (getRand(alg) < bombDropPercentage) {
                 // create a ptr to a bomb object and place on the board
-                bombPtrs.emplace_back(std::make_shared<Bomb>(x, y, 1, 4));
+                bombPtrs.emplace_back(std::make_shared<Bomb>(x, y, 1, 3));
                 gameBoard.setObject(x, y, bombPtrs[bombPtrs.size() - 1]);
             }
         }

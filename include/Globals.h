@@ -7,7 +7,7 @@
 
 #include <string>
 
-// define other external ints to be modified by options
+// globally accessible data: extern allows any file sourcing Globals.h to use these
 extern int rowsize;
 extern int columnsize;
 extern int amountOfBoxes;
@@ -19,7 +19,8 @@ extern std::string pickupText;
 extern int numberOfDeadPlayers;
 enum SCREEN {TITLE, GAME, PAUSE};
 
-// global functions 
+// global functions also accessible to any file including Globals.h
+std::string getStringOfLength(int length);
 void rangeCheck(int x, int y);
 bool checkValidInput(std::string myInput, SCREEN thisScreen = GAME);
 char getValidInput(SCREEN thisScreen = GAME);
