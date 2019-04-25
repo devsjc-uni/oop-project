@@ -8,6 +8,7 @@
 #include <memory>   // for shared_ptr
 #include <thread>   // for sleep
 #include <random>
+#include <chrono>
 
 // create a random generator using mersenne twister algorithm
 std::random_device rd;
@@ -234,8 +235,7 @@ void TileList::explodeBomb(int x, int y, int bombStrength, int bombRange) {
     // print the explosion
     clearScreen();
     printBoard();
-    using namespace std::chrono_literals;
-    std::this_thread::sleep_for(0.25s);
+    std::this_thread::sleep_for(std::chrono::milliseconds(250));
     // then remove explosion tiles and reprint
     boardLoop([this](int x, int y){
         if (getObject(x, y)->getObjectType() == "Explosion") {
