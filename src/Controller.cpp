@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <random>
 #include <thread>
+#include <chrono>
 
 // parameterised constructor
 Controller::Controller(TileList &inPlayerBoard, int numPlayers) {
@@ -133,8 +134,7 @@ void Controller::performRound() {
             }
             // cout who won
             std::cout << (*this)(playerWhoWon)->getPlayerName() << " wins!\n\n\n";
-            using namespace std::chrono_literals;
-            std::this_thread::sleep_for(2s);
+            std::this_thread::sleep_for(std::chrono::seconds(2));
             break;
             }
     }
