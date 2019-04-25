@@ -89,7 +89,7 @@ void menuscreen::options() {
 	rowsize = getIntBetweenPandQ(5, 100);
 	std::cout << "\n2/5: Enter your desired gameboard columnsize (5-100, standard 13): ";
 	columnsize = getIntBetweenPandQ(5, 100);
-	std::cout << "\n3/5: Choose the amount of boxes to be spawned (standard HIGH)\n"
+	std::cout << "\n3/5: Choose the amount of boxes to be spawned (standard MEDIUM)\n"
 			  << "NONE [0]\t LOW [1]\t MEDIUM [2]\t HIGH [3]: ";
 	amountOfBoxes = getIntBetweenPandQ(0, 3);
 	std::cout << "\n4/5: Enter the number of actions before sudden death (0-500, standard 150): ";
