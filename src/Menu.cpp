@@ -9,6 +9,7 @@
 #include <iostream>
 #include <iomanip>
 #include <thread>
+#include <chrono>
 
 int getIntBetweenPandQ(int p, int q){
     // Returns validated integer between p and q
@@ -97,9 +98,8 @@ void menuscreen::options() {
 	bombDropPercentage = getIntBetweenPandQ(0, 10);
 
 	std::cout << "\nSaving changes...\n";
-    // Mimic long save time to reasure player 
-	using namespace std::chrono_literals;
-    std::this_thread::sleep_for(1s);
+    // Mimic long save time to reasure user 
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 
 }
 
