@@ -55,7 +55,7 @@ public:
     Wall() {isExploded = false;}
     // override Tile functions
     std::string getObjectType() {return "Wall";}
-    void draw() {std::cout << "\u25A0";}
+    void draw() {std::cout << "#";} // unicode "\u25A0"
     ~Wall() {};
 };
 
@@ -66,7 +66,7 @@ public:
     Box() {isExploded = false;}
     // override Tile functions
     std::string getObjectType() {return "Box";}
-    void draw() {std::cout << "\u25A4";} // \u25A4
+    void draw() {std::cout << "+";} // unicode "\u25A4"
     ~Box() {};
 };
 

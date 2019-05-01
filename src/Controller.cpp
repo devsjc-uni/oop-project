@@ -19,6 +19,7 @@ Controller::Controller(TileList &inPlayerBoard, int numPlayers) {
     gameBoard = inPlayerBoard;
     // add players to vector
     if (numPlayers < 2 || numPlayers > 4) {
+        // an unalowwable number of players has been chosen
         std::cout << "\nError: Can only add two to four players!\n";
         exit(0);
     } else {

@@ -61,16 +61,17 @@ bool checkValidInput(std::string myInput, SCREEN thisScreen){
 	return isValid;
 }
 
+// Lambda function to uppercase a string
+auto toUpper = [](std::string inString) {
+	for (auto& x : inString) {x = toupper(x);}
+	return inString;
+};
+
 // function to get valid input for a given screen
 char getValidInput(SCREEN thisScreen) {
 	// uppercase everything for consistency
 	std::string input;
     char character;
-	// Lambda function to uppercase a string
-	auto toUpper = [](std::string inString) {
-		for (auto& x : inString) {x = toupper(x);}
-		return inString;
-	};
 	// get input until it is valid
 	while (!checkValidInput(input, thisScreen)){
 		std::cin >> input;
@@ -82,6 +83,7 @@ char getValidInput(SCREEN thisScreen) {
 }
 
 // function to imporve clarity of printing several newlines elsewhere in code
+// I know there is a screen refresh method but I prefer this
 void clearScreen() {
 	for (int i = 0; i < 30; i++) {std::cout << std::endl;}
 }
@@ -98,10 +100,11 @@ std::string getStringOfLength(int length) {
 	};
 	// initialise an invalid string
 	std::string input = "*";
+	// get a valid string
 	while (!validString(input)) {
 		std::cin >> input;
 		std::cin.ignore(100, '\n');
 	}
-	return input;
+	return toUpper(input);
 }
 

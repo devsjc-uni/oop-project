@@ -33,7 +33,7 @@ public:
     Player(int playerNumber);
     // override Tile member functions
     std::string getObjectType() {return "Player";}
-    void draw();
+    void draw() {std::cout << getIcon();};
     // member functions
     void move(char direction, TileList &playerBoard, std::shared_ptr<Tile> bombToPlant = nullptr);
     void resetActionCount() {actionCount = 0;}

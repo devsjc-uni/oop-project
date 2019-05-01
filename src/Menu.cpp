@@ -35,40 +35,40 @@ int getIntBetweenPandQ(int p, int q){
 // function to print out the title screen
 void menuscreen::title(TITLECHOICE choice) {
 	clearScreen();
-    for (int i = 0; i < 73; i++) {(!(i % 2)) ? std::cout << "\u25A0" : std::cout << " ";}
+    for (int i = 0; i < 73; i++) {(!(i % 2)) ? std::cout << "#" : std::cout << " ";}
     // Lambda function for printing lines beginning and ending with a box
     auto printBoxedNewLines = [](int num) {
-        for (int i = 0; i < num; i++) {std::cout << "\u25A0" << std::setw(75) << "\u25A0\n";}
+        for (int i = 0; i < num; i++) {std::cout << "#" << std::setw(73) << "#\n";}
     };
     std::cout << std::endl;
     printBoxedNewLines(2);
-    std::cout << "\u25A0         Welcome to Sol Cottons marvellous turn-based game of          \u25A0\n"
-              << "\u25A0      ____                  _                                          \u25A0\n"                              
-              << "\u25A0     | __ )  ___  _ __ ___ | |__   ___ _ __ _ __ ___   __ _ _ __       \u25A0\n" 
-              << "\u25A0     |  _ \\ / _ \\| '_ ` _ \\| '_ \\ / _ \\ '__| '_ ` _ \\ / _` | '_ \\      \u25A0\n"
-              << "\u25A0     | |_) | (_) | | | | | | |_) |  __/ |  | | | | | | (_| | | | |     \u25A0\n"
-              << "\u25A0     |____/ \\___/|_| |_| |_|_.__/ \\___|_|  |_| |_| |_|\\__,_|_| |_|     \u25A0\n";
+    std::cout << "#         Welcome to Sol Cottons marvellous turn-based game of          #\n"
+              << "#      ____                  _                                          #\n"                              
+              << "#     | __ )  ___  _ __ ___ | |__   ___ _ __ _ __ ___   __ _ _ __       #\n" 
+              << "#     |  _ \\ / _ \\| '_ ` _ \\| '_ \\ / _ \\ '__| '_ ` _ \\ / _` | '_ \\      #\n"
+              << "#     | |_) | (_) | | | | | | |_) |  __/ |  | | | | | | (_| | | | |     #\n"
+              << "#     |____/ \\___/|_| |_| |_|_.__/ \\___|_|  |_| |_| |_|\\__,_|_| |_|     #\n";
 	
     printBoxedNewLines(3);
-    std::cout << "\u25A0" << std::setw(20) << "NEW GAME [n]" << std::setw(22) 
-			  << "OPTIONS [o]" << std::setw(19)  << "QUIT [q]" << std::setw(14) << "\u25A0\n";
+    std::cout << "#" << std::setw(20) << "NEW GAME [n]" << std::setw(22) 
+			  << "OPTIONS [o]" << std::setw(19)  << "QUIT [q]" << std::setw(12) << "#\n";
     // Lambda function to draw an underline at a certain point in the line
 	auto underline = [](int distance, int length) {
-		std::cout << "\u25A0" << std::setw(distance);
+		std::cout << "#" << std::setw(distance);
 		for (int i = 0; i < length; i++) {
-			std::cout << "\u25A4";
+			std::cout << "^"; // unicode "\u25A4" 
 		}
-		std::cout << std::setw(78-length-distance) << "\u25A0\n";
+		std::cout << std::setw(74-length-distance) << "#\n";
 	};
     // Underline a different menu option depending on which was chosen
 	switch (choice) {
-		case TITLECHOICE::NEWGAME: {underline(11, 12); break;}
-		case TITLECHOICE::OPTIONS: {underline(34, 11); break;}
-		case TITLECHOICE::QUIT: {underline(56, 8); break;}
+		case TITLECHOICE::NEWGAME: {underline(9, 12); break;}
+		case TITLECHOICE::OPTIONS: {underline(32, 11); break;}
+		case TITLECHOICE::QUIT: {underline(54, 8); break;}
 		case TITLECHOICE::NONE: {printBoxedNewLines(1); break;}
 	}
     printBoxedNewLines(2);
-    for (int i = 0; i < 73; i++) {(!(i % 2)) ? std::cout << "\u25A0" : std::cout << " ";}
+    for (int i = 0; i < 73; i++) {(!(i % 2)) ? std::cout << "#" : std::cout << " ";}
     std::cout << std::endl;
 	if (choice == TITLECHOICE::QUIT) {
 		std::cout << "\n\n";
@@ -112,8 +112,8 @@ void displayPauseText() {
 			  << "\t- W: Move up\n\t- A: Move left\n\t- S: Move down\n\t- D: Move right\n"
 			  << "\t- B: Plant bomb\n\t- X: Skip action\n\t- P: Pause game\n"
 			  << "\nBombs are an infinite resource, but once you've planted a bomb you must move off that square next action!"
-			  << "\nThey have a timer of five actions and cannot penetrate through walls (\u25A0).\n"
-			  << "\nPlant bombs to blow up boxes (\u25A4) in order to collect powerups and clear a path to your enemies."
+			  << "\nThey have a timer of five actions and cannot penetrate through walls (#).\n"
+			  << "\nPlant bombs to blow up boxes (+) in order to collect powerups and clear a path to your enemies."
 			  << "\nPowerups include:\n"
 			  << "\t- R: Range boost - increases the radius of your bomb's explosions\n"
 			  << "\t- S: Strength boost - increases the number of boxes your bombs are able to penetrate through\n"

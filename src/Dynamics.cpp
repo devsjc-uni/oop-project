@@ -64,20 +64,6 @@ Player::Player(int inPlayerNumber) {
     }
 }
 
-// override Tile draw function for each player number
-void Player::draw() {
-    switch(playerNumber) {
-        case 1: {std::cout << "\u2687"; break;}
-        case 2: {std::cout << "\u26D1"; break;}
-        case 3: {std::cout << "\u267E"; break;}
-        case 4: {std::cout << "\u263A"; break;}
-        default: {
-            std:: cout << "Error! Incorrect playerNumber";
-            exit(0);
-        }
-    }
-}
-
 void Player::zeroAttributes() {
     // set attributes to zero to send player to bottom of leaderboard
     range = 0;
@@ -88,10 +74,10 @@ void Player::zeroAttributes() {
 // function to get the players icon
 std::string Player::getIcon() const {
     switch(playerNumber) {
-        case 1: {return "\u2687";}
-        case 2: {return "\u26D1";}
-        case 3: {return "\u267E";}
-        case 4: {return "\u263A";}
+        case 1: {return "♥";} // unicode: "\u2687"
+        case 2: {return "♣";} // unicode: "\u26D1"
+        case 3: {return "♦";} // unicode: "\u267E"
+        case 4: {return "♠";} // unicode: "\u263A"
         default: {
             std:: cout << "Error! Incorrect playerNumber";
             exit(0);
