@@ -88,13 +88,15 @@ void clearScreen() {
 	for (int i = 0; i < 30; i++) {std::cout << std::endl;}
 }
 
+// funtion to get input for a string of certain length without any special characters
 std::string getStringOfLength(int length) {
+	// lambda function to check if a string is valid
 	auto validString = [length](const std::string& s) {
 		int i = 0;
 		for (const char c : s) {
 			i += 1;
-			if (!isalpha(c)) return false;
-			if (i > length) return false;
+			if (!isalpha(c)) return false; // not a letter
+			if (i > length) return false; // string too long
 		}
 		return true;
 	};
@@ -105,6 +107,7 @@ std::string getStringOfLength(int length) {
 		std::cin >> input;
 		std::cin.ignore(100, '\n');
 	}
+	// return the string in allcaps
 	return toUpper(input);
 }
 

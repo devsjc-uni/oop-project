@@ -39,6 +39,7 @@ public:
     virtual ~Tile() {};
 };
 
+// Tile derived class - Explosion
 class Explosion : public Tile {
 public:
     // parameterised constructor
@@ -70,6 +71,7 @@ public:
     ~Box() {};
 };
 
+// Tile derived class - PowerUp
 class PowerUp : public Tile {
 public:
     enum powerUpType {STRENGTH, AGILITY, RANGE};

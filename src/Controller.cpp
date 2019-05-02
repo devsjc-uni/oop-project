@@ -183,9 +183,11 @@ void Controller::setInfo(int PlayerNumber, int actionNumber) {
     // text to print if a players turn is not over
     if (actionsRemaining != 0) {
         setText << " " << (*this)(PlayerNumber)->getPlayerName()
-                  << ": " 
-                  << actionsRemaining
-                  << " Actions remaining";
+                << ": " 
+                << actionsRemaining
+                << " Action";
+        if (actionsRemaining > 1) {setText << "s";}
+        setText << " remaining";
     } else {
         // otherwise find the next not dead player
         int nextPlayer = PlayerNumber;
