@@ -74,10 +74,10 @@ void Player::zeroAttributes() {
 // function to get the players icon
 std::string Player::getIcon() const {
     switch(playerNumber) {
-        case 1: {return "♥";} // unicode: "\u2687"
-        case 2: {return "♣";} // unicode: "\u26D1"
-        case 3: {return "♦";} // unicode: "\u267E"
-        case 4: {return "♠";} // unicode: "\u263A"
+        case 1: {return "@";} // unicode: "\u2687"
+        case 2: {return "£";} // unicode: "\u26D1"
+        case 3: {return "%";} // unicode: "\u267E"
+        case 4: {return "&";} // unicode: "\u263A"
         default: {
             std:: cout << "Error! Incorrect playerNumber";
             exit(0);
