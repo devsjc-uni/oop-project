@@ -41,13 +41,16 @@ bool checkValidInput(std::string myInput, SCREEN thisScreen){
 			validInputs.push_back("B");
 			validInputs.push_back("X");
 			validInputs.push_back("P");
+			break;
 		} case TITLE : {
 			validInputs.push_back("N");
 			validInputs.push_back("O");
 			validInputs.push_back("Q");
+			break;
 		} case PAUSE : {
 			validInputs.push_back("C");
 			validInputs.push_back("Q");
+			break;
 		}
 	}
 	// check over the whole valid inputs vector and compare
